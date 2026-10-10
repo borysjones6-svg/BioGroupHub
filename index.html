@@ -541,8 +541,6 @@ body.call-open { overflow:hidden; }
 <footer>BioGroup Hub · Biology students learning together</footer>
 </div>
 
-<script type="module">
-
 import {
   auth,
   db,
@@ -568,10 +566,8 @@ let dailyCall = null;
 let dailyStarting = false;
 
 /* IMPORTANT: Replace this with your actual Daily room URL. */
-
 const DAILY_ROOM_URL =
-  "https://biohub.daily.co/zqtorPhiiihNSbZEkUA6";
-  
+  "https://YOUR-DAILY-DOMAIN.daily.co/biogroup-study";
 
 function showMessage(id, text, success = false) {
   const element = $(id);
@@ -872,13 +868,13 @@ $("clearChat").addEventListener("click", () => {
 
 /* DAILY FULL-SCREEN VIDEO CALL */
 function getDailyRoom() {
-  if (https://biohub.daily.co/zqtorPhiiihNSbZEkUA6.includes("YOUR-DAILY-DOMAIN")) {
+  if (DAILY_ROOM_URL.includes("YOUR-DAILY-DOMAIN")) {
     alert("Add your actual Daily room URL in the JavaScript first.");
     return "";
   }
 
   try {
-    const url = new URL(https://biohub.daily.co/zqtorPhiiihNSbZEkUA6);
+    const url = new URL(DAILY_ROOM_URL);
 
     if (url.protocol !== "https:" || !url.hostname.endsWith(".daily.co")) {
       alert("Check your Daily room URL.");
@@ -1027,4 +1023,7 @@ $("roomInput").value = "biogroup-study";
 openPage("home");
 </script>
 </body>
-</html>
+  </html>
+
+  
+        
