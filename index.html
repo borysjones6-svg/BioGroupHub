@@ -2,1014 +2,1046 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#087f5b">
-  <title>BioGroup Hub</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#073b2d">
+<title>BioGroup Hub</title>
+<script src="https://meet.jit.si/external_api.js"></script>
+<style>
+:root {
+  --green:#087f5b;
+  --dark:#073b2d;
+  --mint:#e1f8ed;
+  --bg:#f3f7f5;
+  --ink:#18352b;
+  --muted:#718078;
+  --line:#e0e9e4;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,sans-serif;
+}
+button,input,textarea { font:inherit; }
+button { cursor:pointer; }
+.hidden { display:none!important; }
 
-  <style>
-    :root {
-      --green: #087f5b;
-      --dark: #07543f;
-      --light: #e9f8f0;
-      --bg: #f4f8f6;
-      --white: #ffffff;
-      --text: #18352b;
-      --muted: #63776e;
-      --border: #dce8e1;
-      --red: #b42318;
-    }
+header {
+  background:white;
+  padding:15px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+.brand {
+  font-size:20px;
+  font-weight:bold;
+  color:var(--dark);
+}
+.brand small {
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+nav {
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  background:white;
+  padding:10px 4%;
+  border-bottom:1px solid var(--line);
+}
+nav button {
+  flex-shrink:0;
+  border:0;
+  border-radius:10px;
+  background:white;
+  padding:12px;
+  color:var(--muted);
+  font-weight:bold;
+}
+nav button.active,
+nav button:hover {
+  background:var(--mint);
+  color:var(--dark);
+}
+.container {
+  width:min(1050px,92%);
+  margin:24px auto 50px;
+}
+.card {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:21px;
+  margin-bottom:17px;
+  box-shadow:0 8px 25px #073b2d09;
+}
+h1 { font-size:clamp(26px,5vw,37px); margin-top:0; }
+h2 { font-size:22px; margin-top:0; }
+p { line-height:1.6; }
+.muted { color:var(--muted); }
+.small { font-size:13px; }
 
-    * {
-      box-sizing: border-box;
-    }
+.hero {
+  padding:35px 25px;
+  border-radius:23px;
+  background:radial-gradient(circle at 85% 10%,#20b780,transparent 32%),linear-gradient(125deg,#073b2d,#087f5b);
+  color:white;
+  margin-bottom:20px;
+}
+.hero p { color:#e1fff0; }
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-    }
+.stats,.grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.stat,.action {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+}
+.stat strong {
+  display:block;
+  color:var(--green);
+  font-size:30px;
+  margin-top:8px;
+}
+.action {
+  width:100%;
+  text-align:left;
+  color:var(--ink);
+  transition:.15s;
+}
+.action:hover {
+  border-color:var(--green);
+  transform:translateY(-2px);
+}
+.action span {
+  display:block;
+  font-size:27px;
+  margin-bottom:10px;
+}
+.action strong { display:block; margin-bottom:6px; }
+.action p { font-size:13px; color:var(--muted); margin-bottom:0; }
 
-    button, input, textarea, select {
-      font: inherit;
-    }
+.btn {
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  background:var(--green);
+  color:white;
+  font-weight:bold;
+}
+.btn.light { background:var(--mint); color:var(--dark); }
+.btn.red { background:#bd3546; }
+.btn:disabled { opacity:.6; }
 
-    button {
-      cursor: pointer;
-    }
+label {
+  display:block;
+  font-size:14px;
+  font-weight:bold;
+  margin:14px 0 7px;
+}
+input,textarea {
+  width:100%;
+  padding:13px;
+  border:1px solid #d6e3dc;
+  border-radius:10px;
+  background:white;
+  color:var(--ink);
+}
+textarea { min-height:85px; resize:vertical; }
+input:focus,textarea:focus {
+  outline:2px solid #a5e8c7;
+  border-color:var(--green);
+}
 
-    .hidden {
-      display: none !important;
-    }
+.auth {
+  width:min(440px,92%);
+  margin:40px auto;
+}
+.auth .card { padding:25px; }
+.auth-switch {
+  background:none;
+  border:0;
+  color:var(--green);
+  font-weight:bold;
+}
+.notice {
+  background:#f0f8f3;
+  border:1px solid #d5ecdf;
+  border-radius:11px;
+  padding:12px;
+  font-size:13px;
+  line-height:1.5;
+}
+.message {
+  padding:12px;
+  background:#fff0f0;
+  color:#a12636;
+  border-radius:10px;
+  margin-top:12px;
+  overflow-wrap:anywhere;
+}
+.success { background:#e2f8eb; color:#075e42; }
 
-    .auth-screen {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      background: linear-gradient(145deg, #07543f, #0c9b6b);
-    }
+.report {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+  margin-top:12px;
+  overflow-wrap:anywhere;
+}
+.report a {
+  color:var(--green);
+  font-weight:bold;
+  text-decoration:none;
+}
 
-    .auth-card {
-      background: white;
-      width: 100%;
-      max-width: 430px;
-      padding: 28px;
-      border-radius: 20px;
-      box-shadow: 0 12px 40px #003c2b40;
-    }
+.meeting {
+  background:#071f19;
+  color:white;
+  border-radius:23px;
+  padding:22px;
+}
+.meeting-top {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.pill {
+  background:#173e32;
+  color:#aaf0cb;
+  padding:8px 11px;
+  border-radius:30px;
+  font-size:12px;
+}
+.meeting p { color:#b6d0c4; }
+.meeting input {
+  background:#102f25;
+  color:white;
+  border-color:#315448;
+}
+.meeting input::placeholder { color:#b6c9c0; }
+.meeting-controls,.meeting-buttons {
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin:14px 0;
+}
+.meeting-controls input { flex:1; min-width:150px; }
+.stage {
+  min-height:300px;
+  border:1px solid #244b3d;
+  border-radius:17px;
+  background:radial-gradient(ellipse at center,#164d3b,#0b241c 70%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:18px;
+  overflow:hidden;
+}
+.stage-content { max-width:460px; }
+.stage-content .emoji { font-size:48px; }
+.stage p { font-size:14px; }
+#jitsiContainer { width:100%; }
+.chat-message {
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin:10px 0;
+  overflow-wrap:anywhere;
+}
+.avatar {
+  width:60px;
+  height:60px;
+  border-radius:18px;
+  background:var(--mint);
+  display:grid;
+  place-items:center;
+  font-size:30px;
+  margin-bottom:15px;
+}
+footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:18px;
+}
 
-    .brand {
-      color: var(--green);
-      font-size: 27px;
-      font-weight: 800;
-      margin-bottom: 5px;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .form {
-      display: grid;
-      gap: 13px;
-      margin-top: 20px;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      background: white;
-      color: var(--text);
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    button.primary {
-      background: var(--green);
-      color: white;
-      border: none;
-      padding: 12px 15px;
-      border-radius: 9px;
-      font-weight: 700;
-    }
-
-    button.primary:hover {
-      background: var(--dark);
-    }
-
-    button.secondary {
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--green);
-      padding: 10px 13px;
-      border-radius: 9px;
-    }
-
-    button.danger {
-      color: var(--red);
-      border: 1px solid #f2c9c5;
-      background: white;
-      padding: 8px 10px;
-      border-radius: 8px;
-    }
-
-    .link-button {
-      background: none;
-      border: none;
-      color: var(--green);
-      font-weight: bold;
-      padding: 8px 0;
-    }
-
-    .message {
-      font-size: 14px;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-    }
-
-    .app-header {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .app-header .brand {
-      font-size: 22px;
-      margin: 0;
-    }
-
-    .header-right {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    nav {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 10px 16px;
-      background: white;
-      border-bottom: 1px solid var(--border);
-    }
-
-    nav button {
-      flex-shrink: 0;
-      background: transparent;
-      border: none;
-      padding: 10px 12px;
-      border-radius: 8px;
-      color: var(--muted);
-    }
-
-    nav button.active,
-    nav button:hover {
-      background: var(--light);
-      color: var(--green);
-    }
-
-    main {
-      max-width: 1150px;
-      margin: auto;
-      padding: 24px 16px 50px;
-    }
-
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .page-title {
-      margin-top: 0;
-      margin-bottom: 6px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin: 20px 0;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-      min-width: 0;
-    }
-
-    .stat {
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--green);
-      margin-top: 12px;
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .entry {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 13px;
-      margin: 10px 0;
-      overflow-wrap: anywhere;
-    }
-
-    .entry h3 {
-      margin: 0 0 8px;
-    }
-
-    .entry p {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .entry a {
-      color: var(--green);
-      overflow-wrap: anywhere;
-    }
-
-    .entry small {
-      color: var(--muted);
-    }
-
-    .entry-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .notice {
-      background: #fff8df;
-      border: 1px solid #f1e2a6;
-      border-radius: 10px;
-      padding: 12px;
-      line-height: 1.5;
-      font-size: 14px;
-      margin: 14px 0;
-    }
-
-    .success-notice {
-      background: var(--light);
-      border: 1px solid #b9e4cd;
-      border-radius: 10px;
-      padding: 12px;
-      line-height: 1.5;
-    }
-
-    .empty {
-      color: var(--muted);
-      padding: 18px 0;
-    }
-
-    .footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      padding: 24px 12px;
-    }
-
-    @media (max-width: 480px) {
-      .auth-card {
-        padding: 22px;
-      }
-
-      .app-header {
-        padding: 12px;
-      }
-
-      main {
-        padding: 18px 12px 35px;
-      }
-    }
-  </style>
+@media(max-width:560px) {
+  header { padding:12px 4%; }
+  .brand { font-size:17px; }
+  .container { margin-top:17px; }
+  .card { padding:16px; }
+  .grid { grid-template-columns:1fr; }
+  .hero { padding:26px 20px; }
+  .meeting { padding:15px; }
+  .stage { min-height:260px; }
+  .meeting-buttons .btn { flex:1; }
+}
+</style>
 </head>
-
 <body>
 
-  <!-- SIGN IN AND REGISTRATION -->
-  <section id="authScreen" class="auth-screen">
-    <div class="auth-card">
-      <div class="brand">🧬 BioGroup Hub</div>
-      <p class="muted">
-        Your biology group workspace for studying, reports,
-        resources and meetings.
-      </p>
+<header>
+  <div class="brand">
+    🧬 BioGroup Hub
+    <small>Learn together. Discover together.</small>
+  </div>
+  <button id="logoutButton" class="btn light hidden">
+    Sign out
+  </button>
+</header>
 
-      <div id="loginPanel">
-        <h2>Welcome back</h2>
-        <form id="loginForm" class="form">
-          <input
-            id="loginEmail"
-            type="email"
-            placeholder="Email address"
-            autocomplete="email"
-            required
-          >
+<section id="authScreen" class="auth">
+  <div class="card">
+    <h1 id="authTitle">Welcome back</h1>
+    <p class="muted">Your biology group's online workspace.</p>
 
-          <input
-            id="loginPassword"
-            type="password"
-            placeholder="Password"
-            autocomplete="current-password"
-            required
-          >
+    <form id="loginForm">
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" type="email"
+        autocomplete="email" required>
 
-          <button class="primary" type="submit">Sign in</button>
-        </form>
+      <label for="loginPassword">Password</label>
+      <input id="loginPassword" type="password"
+        autocomplete="current-password" required>
 
-        <p>
-          New here?
-          <button type="button" id="showRegister" class="link-button">
-            Create an account
-          </button>
-        </p>
-      </div>
+      <button class="btn" style="width:100%;margin-top:18px">
+        Sign in
+      </button>
+    </form>
 
-      <div id="registerPanel" class="hidden">
-        <h2>Create your account</h2>
-        <form id="registerForm" class="form">
-          <input
-            id="registerName"
-            type="text"
-            placeholder="Full name"
-            autocomplete="name"
-            required
-          >
+    <form id="registerForm" class="hidden">
+      <label for="registerName">Full name</label>
+      <input id="registerName" maxlength="70" required>
 
-          <input
-            id="registerEmail"
-            type="email"
-            placeholder="Email address"
-            autocomplete="email"
-            required
-          >
+      <label for="registerEmail">Email</label>
+      <input id="registerEmail" type="email" required>
 
-          <input
-            id="registerPassword"
-            type="password"
-            placeholder="Password (at least 6 characters)"
-            minlength="6"
-            autocomplete="new-password"
-            required
-          >
+      <label for="registerPassword">
+        Password (at least 6 characters)
+      </label>
+      <input id="registerPassword" type="password"
+        minlength="6" required>
 
-          <input
-            id="registerConfirm"
-            type="password"
-            placeholder="Confirm password"
-            minlength="6"
-            autocomplete="new-password"
-            required
-          >
+      <button class="btn" style="width:100%;margin-top:18px">
+        Create account
+      </button>
+    </form>
 
-          <button class="primary" type="submit">Register</button>
-        </form>
+    <p id="authSwitchText" class="small muted">
+      New member?
+      <button id="authSwitch" class="auth-switch" type="button">
+        Create an account
+      </button>
+    </p>
+    <div id="authMessage" class="message hidden"></div>
+  </div>
+</section>
 
-        <p>
-          Already registered?
-          <button type="button" id="showLogin" class="link-button">
-            Sign in
-          </button>
-        </p>
-      </div>
+<div id="appScreen" class="hidden">
+<nav id="mainNav">
+  <button class="active" data-page="home">⌂ Home</button>
+  <button data-page="reports">📄 Lab Reports</button>
+  <button data-page="chat">💬 Group Chat</button>
+  <button data-page="meetings">🎥 Meetings</button>
+  <button data-page="members">👤 Members</button>
+</nav>
 
-      <p id="authMessage" class="message" role="status"></p>
-      <p class="muted">
-        Registration creates an account. Group access still requires
-        membership approval before this site can be considered private.
-      </p>
-    </div>
-  </section>
-
-  <!-- MAIN APPLICATION -->
-  <div id="appScreen" class="hidden">
-
-    <header class="app-header">
-      <div>
-        <div class="brand">🧬 BioGroup Hub</div>
-        <div class="muted">Biology Group Workspace</div>
-      </div>
-
-      <div class="header-right">
-        <span id="userLabel" class="muted"></span>
-        <button id="logoutButton" class="secondary" type="button">
-          Sign out
-        </button>
-      </div>
-    </header>
-
-    <nav id="mainNav">
-      <button class="active" data-page="home">Home</button>
-      <button data-page="reports">Lab Reports</button>
-      <button data-page="resources">Resources</button>
-      <button data-page="tasks">Tasks</button>
-      <button data-page="chat">Group Chat</button>
-      <button data-page="meetings">Meetings</button>
-      <button data-page="members">Members</button>
-    </nav>
-
-    <main>
-
-      <!-- HOME -->
-      <section id="home" class="page active">
-        <h1 class="page-title">Welcome to BioGroup Hub</h1>
-        <p class="muted">
-          Organize your biology studies and keep your group work together.
-        </p>
-
-        <div class="grid">
-          <div class="card">
-            <div>🧪 Lab reports</div>
-            <div id="reportCount" class="stat">0</div>
-            <button class="link-button" data-go="reports">
-              View reports →
-            </button>
-          </div>
-
-          <div class="card">
-            <div>📚 Study resources</div>
-            <div id="resourceCount" class="stat">0</div>
-            <button class="link-button" data-go="resources">
-              View resources →
-            </button>
-          </div>
-
-          <div class="card">
-            <div>📅 Tasks</div>
-            <div id="taskCount" class="stat">0</div>
-            <button class="link-button" data-go="tasks">
-              View tasks →
-            </button>
-          </div>
-
-          <div class="card">
-            <div>💬 Messages on this device</div>
-            <div id="chatCount" class="stat">0</div>
-            <button class="link-button" data-go="chat">
-              Open chat →
-            </button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Getting started</h2>
-          <p>1. Add your lab report details.</p>
-          <p>2. Save useful study links and PDF resources.</p>
-          <p>3. Record assignment deadlines.</p>
-          <p>4. Open a video meeting when your group is ready.</p>
-          <p class="muted">
-            Records in this version are stored in this browser only.
-            They are not shared with other members yet.
-          </p>
-        </div>
-      </section>
-
-      <!-- LAB REPORTS -->
-      <section id="reports" class="page">
-        <h1 class="page-title">Lab Reports</h1>
-        <p class="muted">
-          Record report titles, course details and document links.
-        </p>
-
-        <div class="card">
-          <form id="reportForm" class="form">
-            <input id="reportTitle" placeholder="Report title" required>
-            <input id="reportCourse" placeholder="Course / unit">
-            <input id="reportLink" type="url"
-              placeholder="Document URL (optional)">
-            <textarea id="reportNotes"
-              placeholder="Notes or submission details"></textarea>
-            <button class="primary" type="submit">Add report</button>
-          </form>
-        </div>
-
-        <div id="reportList"></div>
-      </section>
-
-      <!-- RESOURCES -->
-      <section id="resources" class="page">
-        <h1 class="page-title">Study Resources</h1>
-        <p class="muted">
-          Save lecture notes, PDFs, websites and useful study links.
-        </p>
-
-        <div class="card">
-          <form id="resourceForm" class="form">
-            <input id="resourceTitle" placeholder="Resource title" required>
-            <input id="resourceSubject" placeholder="Subject / unit">
-            <input id="resourceLink" type="url"
-              placeholder="PDF or website URL" required>
-            <button class="primary" type="submit">Add resource</button>
-          </form>
-        </div>
-
-        <div id="resourceList"></div>
-      </section>
-
-      <!-- TASKS -->
-      <section id="tasks" class="page">
-        <h1 class="page-title">Tasks and Deadlines</h1>
-        <p class="muted">
-          Keep track of assignments, practicals and group deadlines.
-        </p>
-
-        <div class="card">
-          <form id="taskForm" class="form">
-            <input id="taskTitle" placeholder="Task title" required>
-            <input id="taskDue" type="date" aria-label="Due date">
-            <select id="taskPriority">
-              <option value="Normal">Normal priority</option>
-              <option value="High">High priority</option>
-            </select>
-            <button class="primary" type="submit">Add task</button>
-          </form>
-        </div>
-
-        <div id="taskList"></div>
-      </section>
-
-      <!-- CHAT -->
-      <section id="chat" class="page">
-        <h1 class="page-title">Group Chat</h1>
-
-        <div class="notice">
-          Demo mode: messages are saved only in this browser.
-          Other group members cannot see them yet. Firebase real-time
-          messaging and database security still need to be configured.
-        </div>
-
-        <div class="card">
-          <div id="chatList"></div>
-
-          <form id="chatForm" class="form">
-            <textarea id="chatInput"
-              placeholder="Write a study message..." required></textarea>
-            <button class="primary" type="submit">Save message</button>
-          </form>
-        </div>
-      </section>
-
-      <!-- MEETINGS -->
-      <section id="meetings" class="page">
-        <h1 class="page-title">Video Meetings</h1>
-        <p class="muted">
-          Start or join a browser-based video meeting using Jitsi Meet.
-        </p>
-
-        <div class="notice">
-          Meeting rooms created through this demo are not restricted
-          by BioGroup Hub membership. Anyone with the room link may
-          be able to join. Do not discuss private information in an
-          unprotected room.
-        </div>
-
-        <div class="card">
-          <h2>Start a meeting</h2>
-          <p class="muted">
-            Create a room name and open Jitsi Meet in a new tab.
-            Allow camera and microphone access when prompted.
-          </p>
-
-          <button id="startMeeting" class="primary" type="button">
-            Start a new meeting
-          </button>
-
-          <hr style="border:0;border-top:1px solid var(--border);margin:22px 0">
-
-          <h2>Join a meeting</h2>
-          <form id="joinMeetingForm" class="form">
-            <input id="meetingRoom"
-              placeholder="Enter the meeting room name" required>
-            <button class="secondary" type="submit">Join meeting</button>
-          </form>
-        </div>
-      </section>
-
-      <!-- MEMBERS -->
-      <section id="members" class="page">
-        <h1 class="page-title">Members</h1>
-
-        <div class="notice">
-          This page currently displays the signed-in account only.
-          It is not yet a shared member directory, and registration
-          is not the same as membership approval.
-        </div>
-
-        <div class="card">
-          <h2>Your account</h2>
-          <p><strong>Name:</strong> <span id="memberName">—</span></p>
-          <p><strong>Email:</strong> <span id="memberEmail">—</span></p>
-          <p><strong>Authentication:</strong> Firebase</p>
-        </div>
-      </section>
-
-    </main>
-
-    <footer class="footer">
-      BioGroup Hub · Biology, collaboration and discovery
-    </footer>
+<main class="container">
+<section id="homePage" class="page">
+  <div class="hero">
+    <p style="letter-spacing:2px;font-size:12px;font-weight:bold">
+      YOUR BIOLOGY WORKSPACE
+    </p>
+    <h1>Think together.<br>Discover more.</h1>
+    <p>Share lab reports, exchange ideas and meet your biology group online.</p>
+    <button class="btn light" data-go="reports">
+      ＋ Share a lab report
+    </button>
   </div>
 
-  <script type="module">
-    import {
+  <div class="stats">
+    <div class="stat">
+      Lab reports shared
+      <strong id="reportCount">0</strong>
+    </div>
+    <div class="stat">
+      Your saved chat messages
+      <strong id="chatCount">0</strong>
+    </div>
+  </div>
+
+  <h2>Quick access</h2>
+  <div class="grid">
+    <button class="action" data-go="reports">
+      <span>📄</span>
+      <strong>Lab Reports</strong>
+      <p>Share report links with your group.</p>
+    </button>
+    <button class="action" data-go="chat">
+      <span>💬</span>
+      <strong>Group Chat</strong>
+      <p>Discuss biology and practical work.</p>
+    </button>
+    <button class="action" data-go="meetings">
+      <span>🎥</span>
+      <strong>Video Meetings</strong>
+      <p>Start or join an online meeting.</p>
+    </button>
+    <button class="action" data-go="members">
+      <span>🧑‍🔬</span>
+      <strong>My Profile</strong>
+      <p>View your signed-in account.</p>
+    </button>
+  </div>
+</section>
+
+  
+<!-- LAB REPORTS PAGE -->
+<section id="reportsPage" class="page hidden">
+  <div class="card">
+    <h1>📄 Lab Reports</h1>
+    <p class="muted">Share your practical reports with the biology group using Google Drive links.</p>
+
+    <div class="notice">
+      <strong>How to share a report</strong><br>
+      1. Upload your report to Google Drive.<br>
+      2. Set its sharing permission appropriately for your group.<br>
+      3. Copy the share link and paste it below.
+    </div>
+
+    <form id="reportForm">
+      <label for="reportTitle">Report title</label>
+      <input id="reportTitle" maxlength="120" placeholder="e.g. Cell Biology Practical 1" required>
+
+      <label for="reportCourse">Course / unit</label>
+      <input id="reportCourse" maxlength="100" placeholder="e.g. Cell Biology" required>
+
+      <label for="reportDescription">Description</label>
+      <textarea id="reportDescription" maxlength="1000" placeholder="Briefly describe the report"></textarea>
+
+      <label for="reportLink">Google Drive share link</label>
+      <input id="reportLink" type="url" placeholder="https://drive.google.com/..." required>
+
+      <button class="btn" type="submit">Share report link</button>
+    </form>
+    <div id="reportMessage" class="message hidden"></div>
+  </div>
+
+  <div class="card">
+    <h2>Shared reports</h2>
+    <p class="muted small">Reports are listed here when Firestore is configured correctly.</p>
+    <div id="reportsList">
+      <p class="muted">Loading reports...</p>
+    </div>
+  </div>
+</section>
+
+<!-- GROUP CHAT PAGE -->
+<section id="chatPage" class="page hidden">
+  <div class="card">
+    <h1>💬 Group Chat</h1>
+    <div class="notice">
+      This version saves messages in this browser on this device only.
+      Messages are not yet shared live with other members.
+    </div>
+
+    <div id="chatMessages" style="margin-top:18px">
+      <p class="muted">No messages yet. Start the discussion.</p>
+    </div>
+
+    <form id="chatForm">
+      <label for="chatInput">Your message</label>
+      <textarea id="chatInput" maxlength="2000" placeholder="Ask a question or share an idea..." required></textarea>
+      <button class="btn" type="submit">Send message</button>
+      <button class="btn light" id="clearChat" type="button">Clear this device's chat</button>
+    </form>
+  </div>
+</section>
+
+<!-- VIDEO MEETINGS PAGE -->
+<section id="meetingsPage" class="page hidden">
+  <div class="meeting">
+    <div class="meeting-top">
+      <div>
+        <h1>🎥 Biology Meeting Room</h1>
+        <p>Meet, discuss practicals and collaborate online.</p>
+      </div>
+      <span class="pill" id="meetingStatus">Ready to connect</span>
+    </div>
+
+    <label for="roomInput">Meeting room name</label>
+    <div class="meeting-controls">
+      <input id="roomInput" maxlength="80" placeholder="e.g. KYUBiologyStudy2026">
+    </div>
+
+    <div class="notice">
+      Choose a room name that your group agrees on. Anyone who knows the room name may be able to attempt to join it. Avoid sharing private information in public rooms.
+    </div>
+
+    <div class="meeting-buttons">
+      <button class="btn" id="startMeeting" type="button">Start meeting</button>
+      <button class="btn light" id="joinMeeting" type="button">Join meeting</button>
+      <button class="btn light" id="openMeeting" type="button">Open in Chrome</button>
+      <button class="btn red hidden" id="leaveMeeting" type="button">Leave meeting</button>
+    </div>
+
+    <div class="stage">
+      <div id="meetingPlaceholder" class="stage-content">
+        <div class="emoji">🧬</div>
+        <h2>Your virtual biology laboratory</h2>
+        <p>Choose a room name, then start or join your group's meeting.</p>
+        <p class="small">Microphone, camera and screen sharing depend on browser permissions and the meeting service.</p>
+      </div>
+      <div id="jitsiContainer" class="hidden" style="width:100%"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERS PAGE -->
+<section id="membersPage" class="page hidden">
+  <div class="card">
+    <div class="avatar">🧑‍🔬</div>
+    <h1>Member Profile</h1>
+    <p class="muted">Your signed-in BioGroup Hub account.</p>
+
+    <label>Full name</label>
+    <p id="memberName">Loading...</p>
+
+    <label>Email address</label>
+    <p id="memberEmail">Loading...</p>
+
+    <div class="notice">
+      Keep your account password private. Do not share it with other group members.
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  BioGroup Hub · Biology students learning together
+</footer>
+</div>
+
+  
+<script type="module">
+import {
+  auth,
+  db,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updateProfile,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  serverTimestamp
+} from "./firebase.js";
+
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let showingRegister = false;
+let jitsiApi = null;
+let reportsUnsubscribe = null;
+
+const safeText = value => String(value ?? "");
+
+function showMessage(id, message, success = false) {
+  const element = $(id);
+  element.textContent = message;
+  element.classList.remove("hidden", "success");
+  if (success) element.classList.add("success");
+}
+
+function hideMessage(id) {
+  $(id).classList.add("hidden");
+}
+
+function escapeHTML(value) {
+  return safeText(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+// LOGIN AND REGISTRATION SCREEN
+$("authSwitch").addEventListener("click", () => {
+  showingRegister = !showingRegister;
+
+  $("loginForm").classList.toggle("hidden", showingRegister);
+  $("registerForm").classList.toggle("hidden", !showingRegister);
+
+  $("authTitle").textContent =
+    showingRegister ? "Create your account" : "Welcome back";
+
+  $("authSwitchText").firstChild.textContent =
+    showingRegister ? "Already registered? " : "New member? ";
+
+  $("authSwitch").textContent =
+    showingRegister ? "Sign in" : "Create an account";
+
+  hideMessage("authMessage");
+});
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  hideMessage("authMessage");
+
+  try {
+    await signInWithEmailAndPassword(
       auth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut,
-      onAuthStateChanged
-    } from "./firebase.js";
+      $("loginEmail").value.trim(),
+      $("loginPassword").value
+    );
+  } catch (error) {
+    showMessage("authMessage", error.message);
+  }
+});
 
-    import {
-      updateProfile
-    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+$("registerForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  hideMessage("authMessage");
 
-    const $ = id => document.getElementById(id);
+  const name = $("registerName").value.trim();
+  const email = $("registerEmail").value.trim();
+  const password = $("registerPassword").value;
 
-    const authScreen = $("authScreen");
-    const appScreen = $("appScreen");
-    const authMessage = $("authMessage");
+  if (!name) {
+    showMessage("authMessage", "Enter your full name.");
+    return;
+  }
 
-    function showLogin() {
-      $("loginPanel").classList.remove("hidden");
-      $("registerPanel").classList.add("hidden");
-      authMessage.textContent = "";
-    }
+  try {
+    const credential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
-    function showRegister() {
-      $("registerPanel").classList.remove("hidden");
-      $("loginPanel").classList.add("hidden");
-      authMessage.textContent = "";
-    }
-
-    $("showRegister").addEventListener("click", showRegister);
-    $("showLogin").addEventListener("click", showLogin);
-
-    $("loginForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      authMessage.textContent = "Signing in...";
-
-      try {
-        await signInWithEmailAndPassword(
-          auth,
-          $("loginEmail").value.trim(),
-          $("loginPassword").value
-        );
-
-        $("loginForm").reset();
-        authMessage.textContent = "Signed in successfully.";
-      } catch (error) {
-        console.error("Sign-in error:", error.code);
-        authMessage.textContent =
-          error.code === "auth/invalid-credential"
-            ? "Email or password is incorrect."
-            : error.code === "auth/too-many-requests"
-            ? "Too many attempts. Please wait and try again."
-            : "Sign-in failed. Check your details and Firebase settings.";
-      }
+    await updateProfile(credential.user, {
+      displayName: name
     });
+  } catch (error) {
+    showMessage("authMessage", error.message);
+  }
+});
 
-    $("registerForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      authMessage.textContent = "Creating your account...";
+// AUTHENTICATION STATE
+onAuthStateChanged(auth, user => {
+  currentUser = user;
 
-      const name = $("registerName").value.trim();
-      const email = $("registerEmail").value.trim();
-      const password = $("registerPassword").value;
-      const confirmation = $("registerConfirm").value;
+  $("authScreen").classList.toggle("hidden", !!user);
+  $("appScreen").classList.toggle("hidden", !user);
+  $("logoutButton").classList.toggle("hidden", !user);
 
-      if (password !== confirmation) {
-        authMessage.textContent = "The passwords do not match.";
+  if (!user) {
+    if (reportsUnsubscribe) {
+      reportsUnsubscribe();
+      reportsUnsubscribe = null;
+    }
+    stopMeeting();
+    return;
+  }
+
+  $("memberName").textContent =
+    user.displayName || "BioGroup member";
+  $("memberEmail").textContent = user.email || "";
+
+  loadReports();
+  renderChat();
+  updateCounts();
+});
+
+$("logoutButton").addEventListener("click", async () => {
+  stopMeeting();
+
+  try {
+    await signOut(auth);
+  } catch (error) {
+    alert("Could not sign out: " + error.message);
+  }
+});
+
+// PAGE NAVIGATION
+function openPage(pageName) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.add("hidden");
+  });
+
+  const page = $(pageName + "Page");
+  if (page) page.classList.remove("hidden");
+
+  document.querySelectorAll("#mainNav button").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.page === pageName
+    );
+  });
+}
+
+document.querySelectorAll("#mainNav button").forEach(button => {
+  button.addEventListener("click", () => {
+    openPage(button.dataset.page);
+  });
+});
+
+document.querySelectorAll("[data-go]").forEach(button => {
+  button.addEventListener("click", () => {
+    openPage(button.dataset.go);
+  });
+});
+
+// LAB REPORTS: FIRESTORE
+function loadReports() {
+  if (reportsUnsubscribe) {
+    reportsUnsubscribe();
+  }
+
+  const reportsQuery = query(
+    collection(db, "reports"),
+    orderBy("createdAt", "desc")
+  );
+
+  reportsUnsubscribe = onSnapshot(
+    reportsQuery,
+    snapshot => {
+      $("reportCount").textContent = snapshot.size;
+
+      const list = $("reportsList");
+
+      if (snapshot.empty) {
+        list.innerHTML =
+          '<p class="muted">No reports shared yet.</p>';
         return;
       }
 
-      try {
-        const result = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+      list.innerHTML = "";
 
-        await updateProfile(result.user, {
-          displayName: name
-        });
+      snapshot.forEach(documentSnapshot => {
+        const report = documentSnapshot.data();
+        const article = document.createElement("article");
+        article.className = "report";
 
-        $("registerForm").reset();
-        authMessage.textContent =
-          "Account created successfully. Welcome to BioGroup Hub!";
-      } catch (error) {
-        console.error("Registration error:", error.code);
+        const title = document.createElement("h3");
+        title.textContent = report.title || "Untitled report";
 
-        const errors = {
-          "auth/email-already-in-use":
-            "This email already has an account. Please sign in.",
-          "auth/weak-password":
-            "Please choose a stronger password.",
-          "auth/invalid-email":
-            "Please enter a valid email address.",
-          "auth/operation-not-allowed":
-            "Email/password sign-in is not enabled in Firebase."
-        };
+        const course = document.createElement("p");
+        course.textContent = "Unit: " + (report.course || "Not specified");
 
-        authMessage.textContent =
-          errors[error.code] ||
-          "Registration failed. Check your connection and Firebase settings.";
-      }
-    });
+        const description = document.createElement("p");
+        description.textContent = report.description || "";
 
-    $("logoutButton").addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-        showLogin();
-      } catch (error) {
-        alert("Could not sign out. Please try again.");
-      }
-    });
+        const author = document.createElement("p");
+        author.className = "muted small";
+        author.textContent =
+          "Shared by " + (report.authorName || "Group member");
 
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        authScreen.classList.add("hidden");
-        appScreen.classList.remove("hidden");
+        article.append(title, course, description, author);
 
-        $("userLabel").textContent =
-          user.displayName || user.email || "Member";
+        if (report.link) {
+          try {
+            const url = new URL(report.link);
 
-        $("memberName").textContent =
-          user.displayName || "Name not provided";
-
-        $("memberEmail").textContent = user.email || "—";
-
-        renderAll();
-      } else {
-        appScreen.classList.add("hidden");
-        authScreen.classList.remove("hidden");
-      }
-    });
-
-    // NAVIGATION
-    function goToPage(pageId) {
-      document.querySelectorAll(".page").forEach(page => {
-        page.classList.toggle("active", page.id === pageId);
-      });
-
-      document.querySelectorAll("#mainNav button").forEach(button => {
-        butto
-n => {
-          button.classList.toggle(
-            "active",
-            button.dataset.page === pageId
-          );
+            if (url.protocol === "https:" &&
+                (url.hostname === "drive.google.com" ||
+                 url.hostname === "docs.google.com")) {
+              const link = document.createElement("a");
+              link.href = url.href;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.textContent = "Open report ↗";
+              article.appendChild(link);
+            }
+          } catch {
+            // Ignore invalid report links.
+          }
         }
+
+        list.appendChild(article);
       });
+    },
+    error => {
+      $("reportsList").textContent =
+        "Could not load reports. Check your Firestore setup and security rules.";
+      console.error("Reports error:", error);
     }
+  );
+}
 
-    document.querySelectorAll("#mainNav button").forEach(button => {
-      button.addEventListener("click", () => {
-        goToPage(button.dataset.page);
-      });
+$("reportForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  hideMessage("reportMessage");
+
+  if (!currentUser) {
+    showMessage("reportMessage", "Please sign in first.");
+    return;
+  }
+
+  const title = $("reportTitle").value.trim();
+  const course = $("reportCourse").value.trim();
+  const description = $("reportDescription").value.trim();
+  const link = $("reportLink").value.trim();
+
+  let parsedURL;
+
+  try {
+    parsedURL = new URL(link);
+  } catch {
+    showMessage("reportMessage", "Enter a valid Google Drive link.");
+    return;
+  }
+
+  if (
+    parsedURL.protocol !== "https:" ||
+    !["drive.google.com", "docs.google.com"].includes(parsedURL.hostname)
+  ) {
+    showMessage(
+      "reportMessage",
+      "Use a valid Google Drive or Google Docs share link."
+    );
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "reports"), {
+      title,
+      course,
+      description,
+      link: parsedURL.href,
+      authorName: currentUser.displayName || currentUser.email,
+      authorUid: currentUser.uid,
+      createdAt: serverTimestamp()
     });
 
-    // LOGOUT
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-      } catch (error) {
-        console.error(error);
-        alert("Could not sign out. Please try again.");
-      }
+    $("reportForm").reset();
+    showMessage("reportMessage", "Report link shared successfully.", true);
+  } catch (error) {
+    console.error("Report submission error:", error);
+    showMessage(
+      "reportMessage",
+      "Could not share the report. Check your Firestore security rules."
+    );
+  }
+});
+
+// DEVICE-LOCAL CHAT
+// This is not yet a shared, real-time group chat.
+function chatKey() {
+  return "biogrouphub_chat_" + (currentUser?.uid || "guest");
+}
+
+function getMessages() {
+  try {
+    return JSON.parse(localStorage.getItem(chatKey()) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function renderChat() {
+  const messages = getMessages();
+  const container = $("chatMessages");
+
+  $("chatCount").textContent = messages.length;
+  container.innerHTML = "";
+
+  if (!messages.length) {
+    container.innerHTML =
+      '<p class="muted">No messages yet. Start the discussion.</p>';
+    return;
+  }
+
+  messages.forEach(message => {
+    const article = document.createElement("article");
+    article.className = "chat-message";
+
+    const name = document.createElement("strong");
+    name.textContent = message.name || "Member";
+
+    const text = document.createElement("p");
+    text.textContent = message.text || "";
+    text.style.whiteSpace = "pre-wrap";
+
+    const time = document.createElement("small");
+    time.className = "muted";
+    time.textContent = message.time || "";
+
+    article.append(name, text, time);
+    container.appendChild(article);
+  });
+
+  container.scrollTop = container.scrollHeight;
+}
+
+function updateCounts() {
+  $("chatCount").textContent = getMessages().length;
+}
+
+$("chatForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  if (!currentUser) return;
+
+  const text = $("chatInput").value.trim();
+  if (!text) return;
+
+  try {
+    const messages = getMessages();
+
+    messages.push({
+      name: currentUser.displayName || currentUser.email || "Member",
+      text,
+      time: new Date().toLocaleString()
     });
 
-    // LOCAL STORAGE HELPERS
-    function loadData(key) {
-      try {
-        return JSON.parse(localStorage.getItem(key)) || [];
-      } catch {
-        return [];
-      }
+    localStorage.setItem(
+      chatKey(),
+      JSON.stringify(messages.slice(-100))
+    );
+
+    $("chatInput").value = "";
+    renderChat();
+  } catch (error) {
+    alert("Could not save this message on your device.");
+  }
+});
+
+$("clearChat").addEventListener("click", () => {
+  if (confirm("Clear chat messages saved on this device?")) {
+    localStorage.removeItem(chatKey());
+    renderChat();
+  }
+});
+
+// JITSI VIDEO MEETINGS
+function cleanRoom(value) {
+  return value
+    .replace(/[^a-zA-Z0-9_-]/g, "")
+    .slice(0, 80);
+}
+
+function getRoom() {
+  const room = cleanRoom($("roomInput").value.trim());
+
+  if (!room) {
+    alert("Enter a meeting room name first.");
+    $("roomInput").focus();
+    return "";
+  }
+
+  return room;
+}
+
+function stopMeeting() {
+  if (jitsiApi) {
+    jitsiApi.dispose();
+    jitsiApi = null;
+  }
+
+  $("jitsiContainer").innerHTML = "";
+  $("jitsiContainer").classList.add("hidden");
+  $("meetingPlaceholder").classList.remove("hidden");
+  $("leaveMeeting").classList.add("hidden");
+}
+
+function startJitsi(room) {
+  if (!window.JitsiMeetExternalAPI) {
+    alert("The meeting service did not load. Check your internet and try again.");
+    return;
+  }
+
+  stopMeeting();
+
+  $("meetingPlaceholder").classList.add("hidden");
+  $("jitsiContainer").classList.remove("hidden");
+  $("leaveMeeting").classList.remove("hidden");
+  $("meetingStatus").textContent = "Connecting...";
+
+  jitsiApi = new window.JitsiMeetExternalAPI("meet.jit.si", {
+    roomName: room,
+    parentNode: $("jitsiContainer"),
+    width: "100%",
+    height: 500,
+    userInfo: {
+      displayName: currentUser?.displayName ||
+                   currentUser?.email ||
+                   "BioGroup Member"
+    },
+    configOverwrite: {
+      prejoinPageEnabled: true
+    },
+    interfaceConfigOverwrite: {
+      MOBILE_APP_PROMO: false
     }
+  });
 
-    function saveData(key, data) {
-      localStorage.setItem(key, JSON.stringify(data));
-    }
+  jitsiApi.addEventListener("videoConferenceJoined", () => {
+    $("meetingStatus").textContent = "Connected";
+  });
 
-    // REPORTS
-    function renderReports() {
-      const reports = loadData("bioReports");
-      const list = document.getElementById("reportsList");
+  jitsiApi.addEventListener("videoConferenceLeft", () => {
+    stopMeeting();
+    $("meetingStatus").textContent = "Meeting ended";
+  });
 
-      list.innerHTML = reports.length
-        ? reports.map((report, index) => `
-            <div class="item">
-              <strong>${escapeHTML(report.title)}</strong>
-              <p>${escapeHTML(report.details)}</p>
-              <small>${escapeHTML(report.date)}</small>
-              <button type="button" onclick="deleteReport(${index})">
-                Delete
-              </button>
-            </div>
-          `).join("")
-        : "<p>No reports added yet.</p>";
-    }
+  jitsiApi.addEventListener("readyToClose", () => {
+    stopMeeting();
+    $("meetingStatus").textContent = "Meeting closed";
+  });
+}
 
-    window.deleteReport = function(index) {
-      const reports = loadData("bioReports");
-      reports.splice(index, 1);
-      saveData("bioReports", reports);
-      renderReports();
-    };
+$("startMeeting").addEventListener("click", () => {
+  const room = getRoom();
+  if (room) startJitsi(room);
+});
 
-    document.getElementById("reportForm").addEventListener("submit", event => {
-      event.preventDefault();
+$("joinMeeting").addEventListener("click", () => {
+  const room = getRoom();
+  if (room) startJitsi(room);
+});
 
-      const reports = loadData("bioReports");
-      reports.push({
-        title: document.getElementById("reportTitle").value.trim(),
-        details: document.getElementById("reportDetails").value.trim(),
-        date: new Date().toLocaleDateString()
-      });
+$("openMeeting").addEventListener("click", () => {
+  const room = getRoom();
+  if (!room) return;
 
-      saveData("bioReports", reports);
-      event.target.reset();
-      renderReports();
-    });
+  window.open(
+    "https://meet.jit.si/" + encodeURIComponent(room),
+    "_blank",
+    "noopener,noreferrer"
+  );
+});
 
-    // RESOURCES
-    function renderResources() {
-      const resources = loadData("bioResources");
-      const list = document.getElementById("resourcesList");
+$("leaveMeeting").addEventListener("click", () => {
+  stopMeeting();
+  $("meetingStatus").textContent = "You left the meeting.";
+});
 
-      list.innerHTML = resources.length
-        ? resources.map(resource => `
-            <div class="item">
-              <strong>${escapeHTML(resource.title)}</strong>
-              <p><a href="${safeURL(resource.url)}" target="_blank"
-                rel="noopener noreferrer">Open resource</a></p>
-            </div>
-          `).join("")
-        : "<p>No resources added yet.</p>";
-    }
+$("roomInput").value = "KYUBiologyStudy2026";
 
-    document.getElementById("resourceForm").addEventListener("submit", event => {
-      event.preventDefault();
-
-      const title = document.getElementById("resourceTitle").value.trim();
-      const url = document.getElementById("resourceURL").value.trim();
-
-      if (!/^https?:\/\//i.test(url)) {
-        alert("Enter a complete link starting with https:// or http://");
-        return;
-      }
-
-      const resources = loadData("bioResources");
-      resources.push({ title, url });
-      saveData("bioResources", resources);
-
-      event.target.reset();
-      renderResources();
-    });
-
-    // TASKS
-    function renderTasks() {
-      const tasks = loadData("bioTasks");
-      const list = document.getElementById("tasksList");
-
-      list.innerHTML = tasks.length
-        ? tasks.map((task, index) => `
-            <div class="item">
-              <strong>${escapeHTML(task.title)}</strong>
-              <p>Deadline: ${escapeHTML(task.deadline || "Not set")}</p>
-              <button type="button" onclick="deleteTask(${index})">
-                Delete
-              </button>
-            </div>
-          `).join("")
-        : "<p>No tasks added yet.</p>";
-    }
-
-    window.deleteTask = function(index) {
-      const tasks = loadData("bioTasks");
-      tasks.splice(index, 1);
-      saveData("bioTasks", tasks);
-      renderTasks();
-    };
-
-    document.getElementById("taskForm").addEventListener("submit", event => {
-      event.preventDefault();
-
-      const tasks = loadData("bioTasks");
-      tasks.push({
-        title: document.getElementById("taskTitle").value.trim(),
-        deadline: document.getElementById("taskDeadline").value
-      });
-
-      saveData("bioTasks", tasks);
-      event.target.reset();
-      renderTasks();
-    });
-
-    // GROUP CHAT DEMO — SAVED ONLY IN THIS BROWSER
-    function renderChat() {
-      const messages = loadData("bioChat");
-      const list = document.getElementById("chatMessages");
-
-      list.innerHTML = messages.map(item => `
-        <div class="item">
-          <strong>${escapeHTML(item.name)}</strong>
-          <p>${escapeHTML(item.text)}</p>
-          <small>${escapeHTML(item.time)}</small>
-        </div>
-      `).join("");
-
-      list.scrollTop = list.scrollHeight;
-    }
-
-    document.getElementById("chatForm").addEventListener("submit", event => {
-      event.preventDefault();
-
-      const input = document.getElementById("chatInput");
-      const text = input.value.trim();
-      if (!text) return;
-
-      const messages = loadData("bioChat");
-      messages.push({
-        name: auth.currentUser?.displayName || auth.currentUser?.email || "Member",
-        text,
-        time: new Date().toLocaleTimeString()
-      });
-
-      saveData("bioChat", messages);
-      input.value = "";
-      renderChat();
-    });
-
-    // MEETING LINK
-    document.getElementById("meetingBtn").addEventListener("click", () => {
-      const room = "BioGroupHubStudyRoom2026";
-      window.open(
-        "https://meet.jit.si/" + room,
-        "_blank",
-        "noopener,noreferrer"
-      );
-    });
-
-    // SAFE TEXT AND URL HELPERS
-    function escapeHTML(value) {
-      return String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      })[char]);
-    }
-
-    function safeURL(value) {
-      try {
-        const url = new URL(value);
-        return ["http:", "https:"].includes(url.protocol)
-          ? escapeHTML(url.href)
-          : "#";
-      } catch {
-        return "#";
-      }
-    }
-
-    // INITIAL RENDER
-    function renderAll() {
-      renderReports();
-      renderResources();
-      renderTasks();
-      renderChat();
-    }
-
-    renderAll();
-  </script>
+openPage("home");
+</script>
 </body>
 </html>
