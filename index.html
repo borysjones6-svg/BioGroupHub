@@ -541,6 +541,8 @@ body.call-open { overflow:hidden; }
 <footer>BioGroup Hub · Biology students learning together</footer>
 </div>
 
+<script type="module">
+
 import {
   auth,
   db,
@@ -566,8 +568,10 @@ let dailyCall = null;
 let dailyStarting = false;
 
 /* IMPORTANT: Replace this with your actual Daily room URL. */
+
 const DAILY_ROOM_URL =
-  "https://YOUR-DAILY-DOMAIN.daily.co/biogroup-study";
+  "https://biohub.daily.co/biogroup-study";
+
 
 function showMessage(id, text, success = false) {
   const element = $(id);
@@ -1023,7 +1027,4 @@ $("roomInput").value = "biogroup-study";
 openPage("home");
 </script>
 </body>
-  </html>
-
-  
-        
+</html>
