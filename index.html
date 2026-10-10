@@ -1,81 +1,193 @@
 
+  
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BioGroup Hub | Biology Collaboration</title>
+  <meta name="theme-color" content="#087f5b">
+  <title>BioGroup Hub</title>
 
   <style>
+    :root {
+      --green: #087f5b;
+      --dark: #07543f;
+      --light: #e9f8f0;
+      --bg: #f4f8f6;
+      --white: #ffffff;
+      --text: #18352b;
+      --muted: #63776e;
+      --border: #dce8e1;
+      --red: #b42318;
+    }
+
     * {
       box-sizing: border-box;
     }
 
-    :root {
-      --green: #16845b;
-      --dark: #103b2c;
-      --light: #f1f8f4;
-      --white: #ffffff;
-      --muted: #687b71;
-      --border: #dce9e0;
-    }
-
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--light);
-      color: #183329;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    header {
-      background: var(--dark);
-      color: white;
-      padding: 18px;
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .auth-screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: linear-gradient(145deg, #07543f, #0c9b6b);
+    }
+
+    .auth-card {
+      background: white;
+      width: 100%;
+      max-width: 430px;
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px #003c2b40;
     }
 
     .brand {
-      font-size: 22px;
+      color: var(--green);
+      font-size: 27px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .form {
+      display: grid;
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: white;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    button.primary {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 12px 15px;
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    button.primary:hover {
+      background: var(--dark);
+    }
+
+    button.secondary {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--green);
+      padding: 10px 13px;
+      border-radius: 9px;
+    }
+
+    button.danger {
+      color: var(--red);
+      border: 1px solid #f2c9c5;
+      background: white;
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+
+    .link-button {
+      background: none;
+      border: none;
+      color: var(--green);
       font-weight: bold;
+      padding: 8px 0;
     }
 
-    .brand span {
-      color: #80e2b0;
+    .message {
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
     }
 
-    header p {
-      margin-bottom: 0;
-      font-size: 13px;
-      color: #d0e7da;
+    .app-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .app-header .brand {
+      font-size: 22px;
+      margin: 0;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     nav {
       display: flex;
-      gap: 8px;
-      padding: 12px;
+      gap: 6px;
       overflow-x: auto;
+      padding: 10px 16px;
       background: white;
       border-bottom: 1px solid var(--border);
     }
 
     nav button {
       flex-shrink: 0;
-      border: 0;
-      padding: 11px 14px;
+      background: transparent;
+      border: none;
+      padding: 10px 12px;
       border-radius: 8px;
-      background: var(--light);
-      color: var(--dark);
-      font-weight: bold;
+      color: var(--muted);
     }
 
-    nav button.active {
-      background: var(--green);
-      color: white;
+    nav button.active,
+    nav button:hover {
+      background: var(--light);
+      color: var(--green);
     }
 
     main {
-      max-width: 950px;
+      max-width: 1150px;
       margin: auto;
-      padding: 18px;
+      padding: 24px 16px 50px;
     }
 
     .page {
@@ -86,139 +198,116 @@
       display: block;
     }
 
-    h1 {
-      font-size: 25px;
-      margin-bottom: 8px;
-    }
-
-    .muted {
-      color: var(--muted);
-      line-height: 1.5;
+    .page-title {
+      margin-top: 0;
+      margin-bottom: 6px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
     }
 
     .card {
       background: white;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 17px;
-      margin-bottom: 14px;
+      padding: 18px;
+      min-width: 0;
     }
 
-    .card h3 {
-      margin-top: 5px;
-    }
-
-    .number {
-      font-size: 28px;
-      font-weight: bold;
+    .stat {
+      font-size: 30px;
+      font-weight: 800;
       color: var(--green);
+      margin-top: 12px;
     }
 
-    .symbol {
-      font-size: 25px;
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .primary {
-      border: 0;
-      border-radius: 9px;
-      background: var(--green);
-      color: white;
-      padding: 12px 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .secondary {
-      border: 1px solid var(--border);
+    .entry {
       background: white;
-      color: var(--dark);
-      border-radius: 9px;
-      padding: 10px 12px;
-      cursor: pointer;
-    }
-
-    input, textarea, select {
-      display: block;
-      width: 100%;
-      margin: 8px 0 14px;
-      padding: 12px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font: inherit;
-      background: white;
-    }
-
-    label {
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .item {
-      border-bottom: 1px solid var(--border);
-      padding: 12px 0;
+      border-radius: 10px;
+      padding: 13px;
+      margin: 10px 0;
       overflow-wrap: anywhere;
     }
 
-    .chat-box {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
+    .entry h3 {
+      margin: 0 0 8px;
     }
 
-    #messages {
-      min-height: 180px;
-      max-height: 300px;
-      overflow-y: auto;
-      margin-bottom: 14px;
+    .entry p {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
-    .message {
-      background: var(--light);
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 8px;
+    .entry a {
+      color: var(--green);
+      overflow-wrap: anywhere;
+    }
+
+    .entry small {
+      color: var(--muted);
+    }
+
+    .entry-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
     }
 
     .notice {
-      background: #fff7dc;
-      color: #654c0b;
-      border-radius: 9px;
+      background: #fff8df;
+      border: 1px solid #f1e2a6;
+      border-radius: 10px;
       padding: 12px;
-      font-size: 13px;
       line-height: 1.5;
-      margin-bottom: 14px;
+      font-size: 14px;
+      margin: 14px 0;
     }
 
-    footer {
+    .success-notice {
+      background: var(--light);
+      border: 1px solid #b9e4cd;
+      border-radius: 10px;
+      padding: 12px;
+      line-height: 1.5;
+    }
+
+    .empty {
+      color: var(--muted);
+      padding: 18px 0;
+    }
+
+    .footer {
       text-align: center;
       color: var(--muted);
-      padding: 25px 12px;
       font-size: 12px;
+      padding: 24px 12px;
     }
 
     @media (max-width: 480px) {
+      .auth-card {
+        padding: 22px;
+      }
+
+      .app-header {
+        padding: 12px;
+      }
+
       main {
-        padding: 13px;
-      }
-
-      .grid {
-        gap: 9px;
-      }
-
-      .card {
-        padding: 13px;
-      }
-
-      h1 {
-        font-size: 22px;
+        padding: 18px 12px 35px;
       }
     }
   </style>
@@ -226,464 +315,401 @@
 
 <body>
 
-  
-<div id="authScreen" style="max-width:420px;margin:40px auto;padding:24px;background:white;border-radius:16px;">
-  <h1>🧬 BioGroup Hub</h1>
-  <p>Sign in to your biology workspace.</p>
-
-  <form id="loginForm">
-    <label for="loginEmail">Email address</label>
-    <input id="loginEmail" type="email" required
-      autocomplete="email" placeholder="you@example.com">
-
-    <label for="loginPassword">Password</label>
-    <input id="loginPassword" type="password" required
-      autocomplete="current-password" placeholder="Your password">
-
-    <button type="submit" class="primary">Sign in</button>
-    <p id="authMessage" role="status"></p>
-    
-<div id="register-section">
-  <h2>Create BioGroup Hub Account</h2>
-
-  <form id="register-form">
-    <input
-      type="text"
-      id="register-name"
-      placeholder="Full name"
-      required
-    >
-
-    <input
-      type="email"
-      id="register-email"
-      placeholder="Email address"
-      required
-    >
-
-    <input
-      type="password"
-      id="register-password"
-      placeholder="Password (at least 6 characters)"
-      minlength="6"
-      required
-    >
-
-    <button type="submit">Register</button>
-    <p id="register-message" role="status"></p>
-  </form>
-</div>
-    
-  </form>
-</div>
-
-
-<header>
-  <div class="brand">🧬 BioGroup <span>Hub</span></div>
-  <p>Learn together. Research together. Grow together.</p>
-</header>
-
-<nav>
-  <button class="active" data-page="home">Home</button>
-  <button data-page="reports">Reports</button>
-  <button data-page="resources">Resources</button>
-  <button data-page="chat">Chat</button>
-  <button data-page="meetings">Meetings</button>
-  <button data-page="members">Members</button>
-</nav>
-
-<main>
-
-  <section id="home" class="page active">
-    <h1>Biology Group Dashboard</h1>
-    <p class="muted">
-      Your shared space for practical reports, research and teamwork.
-    </p>
-
-    <div class="grid">
-      <div class="card">
-        <div class="symbol">📄</div>
-        <div class="number" id="reportCount">0</div>
-        <div>Reports added</div>
-      </div>
-
-      <div class="card">
-        <div class="symbol">📚</div>
-        <div class="number" id="resourceCount">0</div>
-        <div>Study resources</div>
-      </div>
-
-      <div class="card">
-        <div class="symbol">💬</div>
-        <h3>Group chat</h3>
-        <button class="primary" onclick="showPage('chat')">
-          Open chat
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="symbol">🎥</div>
-        <h3>Video meetings</h3>
-        <button class="primary" onclick="showPage('meetings')">
-          Open meetings
-        </button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Quick actions</h3>
-      <p><button class="secondary" onclick="showPage('reports')">
-        + Add a report
-      </button></p>
-      <p><button class="secondary" onclick="showPage('resources')">
-        + Add a resource
-      </button></p>
-    </div>
-  </section>
-
-  <section id="reports" class="page">
-    <h1>Practical Reports</h1>
-    <p class="muted">Organize your group's report records.</p>
-
-    <div class="card">
-      <h3>Add a report record</h3>
-      <form id="reportForm">
-        <label for="reportTitle">Report title</label>
-        <input id="reportTitle" required
-          placeholder="e.g. Microscopy practical">
-
-        <label for="reportCourse">Unit or subject</label>
-        <input id="reportCourse" required
-          placeholder="e.g. Cell Biology">
-
-        <label for="reportStatus">Status</label>
-        <select id="reportStatus">
-          <option>In progress</option>
-          <option>Ready for review</option>
-          <option>Submitted</option>
-        </select>
-
-        <button class="primary">Add report</button>
-      </form>
-    </div>
-
-    <div class="card">
-      <h3>Report records</h3>
-      <div id="reportList" class="muted">
-        No reports added yet.
-      </div>
-    </div>
-  </section>
-
-  <section id="resources" class="page">
-    <h1>Study Resources</h1>
-    <p class="muted">Keep track of useful notes and learning materials.</p>
-
-    <div class="card">
-      <h3>Add a resource link</h3>
-      <form id="resourceForm">
-        <label for="resourceTitle">Resource title</label>
-        <input id="resourceTitle" required
-          placeholder="e.g. Cell Biology notes">
-
-        <label for="resourceUrl">Web or shared-file URL</label>
-        <input id="resourceUrl" type="url" required
-          placeholder="https://example.com/notes.pdf">
-
-        <button class="primary">Add resource</button>
-      </form>
-    </div>
-
-    <div class="card">
-      <h3>Resource library</h3>
-      <div id="resourceList" class="muted">
-        No resources added yet.
-      </div>
-    </div>
-  </section>
-
-  <section id="chat" class="page">
-    <h1>Group Chat</h1>
-    <div class="notice">
-      Demonstration only: messages are not shared with other members
-      and may disappear when this page reloads. Live group and private
-      messaging will be connected in a later step.
-    </div>
-
-    <div class="chat-box">
-      <h3>Biology Group</h3>
-      <div id="messages">
-        <div class="message">
-          <strong>BioGroup Hub</strong><br>
-          Welcome! Your future group discussion space is here.
-        </div>
-      </div>
-
-      <form id="chatForm">
-        <label for="chatMessage">Write a message</label>
-        <textarea id="chatMessage" rows="2" required
-          placeholder="Discuss your practical or report..."></textarea>
-        <button class="primary">Send demo message</button>
-      </form>
-    </div>
-
-    <div class="card">
-      <h3>Private messages</h3>
+  <!-- SIGN IN AND REGISTRATION -->
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="brand">🧬 BioGroup Hub</div>
       <p class="muted">
-        After member accounts are connected, you will be able
-        to select a member and start a private conversation.
+        Your biology group workspace for studying, reports,
+        resources and meetings.
+      </p>
+
+      <div id="loginPanel">
+        <h2>Welcome back</h2>
+        <form id="loginForm" class="form">
+          <input
+            id="loginEmail"
+            type="email"
+            placeholder="Email address"
+            autocomplete="email"
+            required
+          >
+
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            required
+          >
+
+          <button class="primary" type="submit">Sign in</button>
+        </form>
+
+        <p>
+          New here?
+          <button type="button" id="showRegister" class="link-button">
+            Create an account
+          </button>
+        </p>
+      </div>
+
+      <div id="registerPanel" class="hidden">
+        <h2>Create your account</h2>
+        <form id="registerForm" class="form">
+          <input
+            id="registerName"
+            type="text"
+            placeholder="Full name"
+            autocomplete="name"
+            required
+          >
+
+          <input
+            id="registerEmail"
+            type="email"
+            placeholder="Email address"
+            autocomplete="email"
+            required
+          >
+
+          <input
+            id="registerPassword"
+            type="password"
+            placeholder="Password (at least 6 characters)"
+            minlength="6"
+            autocomplete="new-password"
+            required
+          >
+
+          <input
+            id="registerConfirm"
+            type="password"
+            placeholder="Confirm password"
+            minlength="6"
+            autocomplete="new-password"
+            required
+          >
+
+          <button class="primary" type="submit">Register</button>
+        </form>
+
+        <p>
+          Already registered?
+          <button type="button" id="showLogin" class="link-button">
+            Sign in
+          </button>
+        </p>
+      </div>
+
+      <p id="authMessage" class="message" role="status"></p>
+      <p class="muted">
+        Registration creates an account. Group access still requires
+        membership approval before this site can be considered private.
       </p>
     </div>
   </section>
 
-  <section id="meetings" class="page">
-    <h1>Video Meetings</h1>
-    <p class="muted">
-      Meet to discuss practicals, research and assignments.
-    </p>
+  <!-- MAIN APPLICATION -->
+  <div id="appScreen" class="hidden">
 
-    <div class="notice">
-      Meeting rooms need to be configured for your group.
-      The meeting button will be connected after we set up the
-      room service and membership permissions.
-    </div>
+    <header class="app-header">
+      <div>
+        <div class="brand">🧬 BioGroup Hub</div>
+        <div class="muted">Biology Group Workspace</div>
+      </div>
 
-    <div class="card">
-      <h3>Start a group meeting</h3>
-      <label for="meetingRoom">Meeting room name</label>
-      <input id="meetingRoom"
-        placeholder="e.g. BioGroupPractical2026">
+      <div class="header-right">
+        <span id="userLabel" class="muted"></span>
+        <button id="logoutButton" class="secondary" type="button">
+          Sign out
+        </button>
+      </div>
+    </header>
 
-      <button class="primary" onclick="prepareMeeting()">
-        Prepare meeting
-      </button>
+    <nav id="mainNav">
+      <button class="active" data-page="home">Home</button>
+      <button data-page="reports">Lab Reports</button>
+      <button data-page="resources">Resources</button>
+      <button data-page="tasks">Tasks</button>
+      <button data-page="chat">Group Chat</button>
+      <button data-page="meetings">Meetings</button>
+      <button data-page="members">Members</button>
+    </nav>
 
-      <p id="meetingStatus" class="muted"></p>
-    </div>
-  </section>
+    <main>
 
-  <section id="members" class="page">
-    <h1>Group Members</h1>
-    <p class="muted">
-      This area will display approved members after authentication
-      is configured.
-    </p>
+      <!-- HOME -->
+      <section id="home" class="page active">
+        <h1 class="page-title">Welcome to BioGroup Hub</h1>
+        <p class="muted">
+          Organize your biology studies and keep your group work together.
+        </p>
 
-    <div class="card">
-      <div class="symbol">🔐</div>
-      <h3>Invite-only access</h3>
-      <p>
-        We will add member invitations, sign-in and access controls
-        before enabling private reports and real chat.
-      </p>
-    </div>
-  </section>
+        <div class="grid">
+          <div class="card">
+            <div>🧪 Lab reports</div>
+            <div id="reportCount" class="stat">0</div>
+            <button class="link-button" data-go="reports">
+              View reports →
+            </button>
+          </div>
 
-</main>
+          <div class="card">
+            <div>📚 Study resources</div>
+            <div id="resourceCount" class="stat">0</div>
+            <button class="link-button" data-go="resources">
+              View resources →
+            </button>
+          </div>
 
-<footer>
-  BioGroup Hub · Biology collaboration workspace
-</footer>
+          <div class="card">
+            <div>📅 Tasks</div>
+            <div id="taskCount" class="stat">0</div>
+            <button class="link-button" data-go="tasks">
+              View tasks →
+            </button>
+          </div>
 
-<script>
-  function showPage(pageId) {
-    document.querySelectorAll(".page").forEach(page => {
-      page.classList.toggle("active", page.id === pageId);
-    });
+          <div class="card">
+            <div>💬 Messages on this device</div>
+            <div id="chatCount" class="stat">0</div>
+            <button class="link-button" data-go="chat">
+              Open chat →
+            </button>
+          </div>
+        </div>
 
-    document.querySelectorAll("nav button").forEach(button => {
-      button.classList.toggle(
-        "active",
-        button.dataset.page === pageId
-      );
-    });
+        <div class="card">
+          <h2>Getting started</h2>
+          <p>1. Add your lab report details.</p>
+          <p>2. Save useful study links and PDF resources.</p>
+          <p>3. Record assignment deadlines.</p>
+          <p>4. Open a video meeting when your group is ready.</p>
+          <p class="muted">
+            Records in this version are stored in this browser only.
+            They are not shared with other members yet.
+          </p>
+        </div>
+      </section>
 
-    window.scrollTo(0, 0);
-  }
+      <!-- LAB REPORTS -->
+      <section id="reports" class="page">
+        <h1 class="page-title">Lab Reports</h1>
+        <p class="muted">
+          Record report titles, course details and document links.
+        </p>
 
-  document.querySelectorAll("nav button").forEach(button => {
-    button.addEventListener("click", () => {
-      showPage(button.dataset.page);
-    });
-  });
+        <div class="card">
+          <form id="reportForm" class="form">
+            <input id="reportTitle" placeholder="Report title" required>
+            <input id="reportCourse" placeholder="Course / unit">
+            <input id="reportLink" type="url"
+              placeholder="Document URL (optional)">
+            <textarea id="reportNotes"
+              placeholder="Notes or submission details"></textarea>
+            <button class="primary" type="submit">Add report</button>
+          </form>
+        </div>
 
-  let reportCount = 0;
-  let resourceCount = 0;
+        <div id="reportList"></div>
+      </section>
 
-  document.getElementById("reportForm").addEventListener(
-    "submit", function(event) {
+      <!-- RESOURCES -->
+      <section id="resources" class="page">
+        <h1 class="page-title">Study Resources</h1>
+        <p class="muted">
+          Save lecture notes, PDFs, websites and useful study links.
+        </p>
+
+        <div class="card">
+          <form id="resourceForm" class="form">
+            <input id="resourceTitle" placeholder="Resource title" required>
+            <input id="resourceSubject" placeholder="Subject / unit">
+            <input id="resourceLink" type="url"
+              placeholder="PDF or website URL" required>
+            <button class="primary" type="submit">Add resource</button>
+          </form>
+        </div>
+
+        <div id="resourceList"></div>
+      </section>
+
+      <!-- TASKS -->
+      <section id="tasks" class="page">
+        <h1 class="page-title">Tasks and Deadlines</h1>
+        <p class="muted">
+          Keep track of assignments, practicals and group deadlines.
+        </p>
+
+        <div class="card">
+          <form id="taskForm" class="form">
+            <input id="taskTitle" placeholder="Task title" required>
+            <input id="taskDue" type="date" aria-label="Due date">
+            <select id="taskPriority">
+              <option value="Normal">Normal priority</option>
+              <option value="High">High priority</option>
+            </select>
+            <button class="primary" type="submit">Add task</button>
+          </form>
+        </div>
+
+        <div id="taskList"></div>
+      </section>
+
+      <!-- CHAT -->
+      <section id="chat" class="page">
+        <h1 class="page-title">Group Chat</h1>
+
+        <div class="notice">
+          Demo mode: messages are saved only in this browser.
+          Other group members cannot see them yet. Firebase real-time
+          messaging and database security still need to be configured.
+        </div>
+
+        <div class="card">
+          <div id="chatList"></div>
+
+          <form id="chatForm" class="form">
+            <textarea id="chatInput"
+              placeholder="Write a study message..." required></textarea>
+            <button class="primary" type="submit">Save message</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- MEETINGS -->
+      <section id="meetings" class="page">
+        <h1 class="page-title">Video Meetings</h1>
+        <p class="muted">
+          Start or join a browser-based video meeting using Jitsi Meet.
+        </p>
+
+        <div class="notice">
+          Meeting rooms created through this demo are not restricted
+          by BioGroup Hub membership. Anyone with the room link may
+          be able to join. Do not discuss private information in an
+          unprotected room.
+        </div>
+
+        <div class="card">
+          <h2>Start a meeting</h2>
+          <p class="muted">
+            Create a room name and open Jitsi Meet in a new tab.
+            Allow camera and microphone access when prompted.
+          </p>
+
+          <button id="startMeeting" class="primary" type="button">
+            Start a new meeting
+          </button>
+
+          <hr style="border:0;border-top:1px solid var(--border);margin:22px 0">
+
+          <h2>Join a meeting</h2>
+          <form id="joinMeetingForm" class="form">
+            <input id="meetingRoom"
+              placeholder="Enter the meeting room name" required>
+            <button class="secondary" type="submit">Join meeting</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- MEMBERS -->
+      <section id="members" class="page">
+        <h1 class="page-title">Members</h1>
+
+        <div class="notice">
+          This page currently displays the signed-in account only.
+          It is not yet a shared member directory, and registration
+          is not the same as membership approval.
+        </div>
+
+        <div class="card">
+          <h2>Your account</h2>
+          <p><strong>Name:</strong> <span id="memberName">—</span></p>
+          <p><strong>Email:</strong> <span id="memberEmail">—</span></p>
+          <p><strong>Authentication:</strong> Firebase</p>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      BioGroup Hub · Biology, collaboration and discovery
+    </footer>
+  </div>
+
+  <script type="module">
+    import {
+      auth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "./firebase.js";
+
+    import {
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+    const $ = id => document.getElementById(id);
+
+    const authScreen = $("authScreen");
+    const appScreen = $("appScreen");
+    const authMessage = $("authMessage");
+
+    function showLogin() {
+      $("loginPanel").classList.remove("hidden");
+      $("registerPanel").classList.add("hidden");
+      authMessage.textContent = "";
+    }
+
+    function showRegister() {
+      $("registerPanel").classList.remove("hidden");
+      $("loginPanel").classList.add("hidden");
+      authMessage.textContent = "";
+    }
+
+    $("showRegister").addEventListener("click", showRegister);
+    $("showLogin").addEventListener("click", showLogin);
+
+    $("loginForm").addEventListener("submit", async event => {
       event.preventDefault();
-
-      const title = document.getElementById("reportTitle").value.trim();
-      const course = document.getElementById("reportCourse").value.trim();
-      const status = document.getElementById("reportStatus").value;
-
-      const item = document.createElement("div");
-      item.className = "item";
-
-      const heading = document.createElement("strong");
-      heading.textContent = title;
-
-      const details = document.createElement("p");
-      details.textContent = course + " · " + status;
-
-      item.append(heading, details);
-
-      const list = document.getElementById("reportList");
-      if (reportCount === 0) list.textContent = "";
-      list.appendChild(item);
-
-      reportCount++;
-      document.getElementById("reportCount").textContent = reportCount;
-      this.reset();
-    }
-  );
-
-  document.getElementById("resourceForm").addEventListener(
-    "submit", function(event) {
-      event.preventDefault();
-
-      const title = document.getElementById("resourceTitle").value.trim();
-      const url = document.getElementById("resourceUrl").value.trim();
-
-      try {
-        const parsed = new URL(url);
-        if (!["https:", "http:"].includes(parsed.protocol)) {
-          throw new Error("Invalid URL");
-        }
-      } catch {
-        alert("Please enter a valid web link.");
-        return;
-      }
-
-      const item = document.createElement("div");
-      item.className = "item";
-
-      const link = document.createElement("a");
-      link.textContent = title;
-      link.href = url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-
-      item.appendChild(link);
-
-      const list = document.getElementById("resourceList");
-      if (resourceCount === 0) list.textContent = "";
-      list.appendChild(item);
-
-      resourceCount++;
-      document.getElementById("resourceCount").textContent = resourceCount;
-      this.reset();
-    }
-  );
-
-  document.getElementById("chatForm").addEventListener(
-    "submit", function(event) {
-      event.preventDefault();
-
-      const input = document.getElementById("chatMessage");
-      const message = input.value.trim();
-      if (!message) return;
-
-      const bubble = document.createElement("div");
-      bubble.className = "message";
-
-      const label = document.createElement("strong");
-      label.textContent = "Demo member";
-
-      const content = document.createElement("p");
-      content.textContent = message;
-
-      bubble.append(label, content);
-      document.getElementById("messages").appendChild(bubble);
-
-      input.value = "";
-      bubble.scrollIntoView({ block: "nearest" });
-    }
-  );
-
-  function prepareMeeting() {
-    const room = document.getElementById("meetingRoom").value.trim();
-    const status = document.getElementById("meetingStatus");
-
-    if (!/^[a-zA-Z0-9_-]{5,50}$/.test(room)) {
-      status.textContent =
-        "Enter a room name using 5–50 letters, numbers, hyphens or underscores.";
-      return;
-    }
-
-    status.textContent =
-      "Room name saved for planning: " + room +
-      ". Video calling is not connected yet.";
-  }
-</script>
-
-  import {
-  auth,
-  createUserWithEmailAndPassword
-} from "./firebase.js";
-
-import { updateProfile } from
-  "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-
-
-  const authScreen = document.getElementById("authScreen");
-  const main = document.querySelector("main");
-  const nav = document.querySelector("nav");
-  const message = document.getElementById("authMessage");
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      authScreen.style.display = "none";
-      main.style.display = "block";
-      nav.style.display = "flex";
-    } else {
-      authScreen.style.display = "block";
-      main.style.display = "none";
-      nav.style.display = "none";
-    }
-  });
-
-  document.getElementById("loginForm").addEventListener(
-    "submit", async event => {
-      event.preventDefault();
-      message.textContent = "Signing in...";
+      authMessage.textContent = "Signing in...";
 
       try {
         await signInWithEmailAndPassword(
           auth,
-          document.getElementById("loginEmail").value.trim(),
-          document.getElementById("loginPassword").value
+          $("loginEmail").value.trim(),
+          $("loginPassword").value
         );
 
-        message.textContent = "Signed in successfully.";
+        $("loginForm").reset();
+        authMessage.textContent = "Signed in successfully.";
       } catch (error) {
-        console.error(error.code);
-        message.textContent =
-          "Sign-in failed. Check your details and Firebase settings.";
+        console.error("Sign-in error:", error.code);
+        authMessage.textContent =
+          error.code === "auth/invalid-credential"
+            ? "Email or password is incorrect."
+            : error.code === "auth/too-many-requests"
+            ? "Too many attempts. Please wait and try again."
+            : "Sign-in failed. Check your details and Firebase settings.";
       }
-    }
-  );
-</script>
-  
-<script type="module">
-  import {
-    auth,
-    createUserWithEmailAndPassword
-  } from "./firebase.js";
+    });
 
-  const registerForm = document.getElementById("register-form");
-  const registerMessage = document.getElementById("register-message");
-
-  if (registerForm) {
-    registerForm.addEventListener("submit", async (event) => {
+    $("registerForm").addEventListener("submit", async event => {
       event.preventDefault();
+      authMessage.textContent = "Creating your account...";
 
-      const email = document.getElementById("register-email").value.trim();
-      const password = document.getElementById("register-password").value;
-      const name = document.getElementById("register-name").value.trim();
+      const name = $("registerName").value.trim();
+      const email = $("registerEmail").value.trim();
+      const password = $("registerPassword").value;
+      const confirmation = $("registerConfirm").value;
 
-      registerMessage.textContent = "Creating account...";
+      if (password !== confirmation) {
+        authMessage.textContent = "The passwords do not match.";
+        return;
+      }
 
       try {
         const result = await createUserWithEmailAndPassword(
@@ -692,26 +718,67 @@ import { updateProfile } from
           password
         );
 
-        await updateProfile(result.user, { displayName: name });
+        await updateProfile(result.user, {
+          displayName: name
+        });
 
-        registerMessage.textContent =
-          "Account created successfully! You can now sign in.";
-        registerForm.reset();
+        $("registerForm").reset();
+        authMessage.textContent =
+          "Account created successfully. Welcome to BioGroup Hub!";
       } catch (error) {
-        registerMessage.textContent =
-          error.code === "auth/email-already-in-use"
-            ? "This email already has an account. Please sign in."
-            : error.code === "auth/weak-password"
-            ? "Please choose a stronger password."
-            : error.message;
+        console.error("Registration error:", error.code);
+
+        const errors = {
+          "auth/email-already-in-use":
+            "This email already has an account. Please sign in.",
+          "auth/weak-password":
+            "Please choose a stronger password.",
+          "auth/invalid-email":
+            "Please enter a valid email address.",
+          "auth/operation-not-allowed":
+            "Email/password sign-in is not enabled in Firebase."
+        };
+
+        authMessage.textContent =
+          errors[error.code] ||
+          "Registration failed. Check your connection and Firebase settings.";
       }
     });
-  }
-</script>
-  
-</body>
-</html>
 
+    $("logoutButton").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        showLogin();
+      } catch (error) {
+        alert("Could not sign out. Please try again.");
+      }
+    });
 
-</body>
-</html>
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        authScreen.classList.add("hidden");
+        appScreen.classList.remove("hidden");
+
+        $("userLabel").textContent =
+          user.displayName || user.email || "Member";
+
+        $("memberName").textContent =
+          user.displayName || "Name not provided";
+
+        $("memberEmail").textContent = user.email || "—";
+
+        renderAll();
+      } else {
+        appScreen.classList.add("hidden");
+        authScreen.classList.remove("hidden");
+      }
+    });
+
+    // NAVIGATION
+    function goToPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => {
+        page.classList.toggle("active", page.id === pageId);
+      });
+
+      document.querySelectorAll("#mainNav button").forEach(button => {
+        butto     
