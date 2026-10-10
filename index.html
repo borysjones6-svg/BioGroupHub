@@ -775,262 +775,241 @@
 
     // NAVIGATION
     function goToPage(pageId) {
-      
-document.querySelectorAll("#mainNav button").forEach(button => {
-  button.addEventListener("click", () => {
-    goToPage(button.dataset.page);
-  });
-});
+      document.querySelectorAll(".page").forEach(page => {
+        page.classList.toggle("active", page.id === pageId);
+      });
 
-document.querySelectorAll("[data-go]").forEach(button => {
-  button.addEventListener("click", () => {
-    goToPage(button.dataset.go);
-  });
-});
-
-// Browser-local demo storage
-function readItems(key) {
-  try {
-    const value = JSON.parse(localStorage.getItem(key) || "[]");
-    return Array.isArray(value) ? value : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveItems(key, items) {
-  localStorage.setItem(key, JSON.stringify(items));
-}
-
-function addText(parent, tag, text, className = "") {
-  const element = document.createElement(tag);
-  element.textContent = text;
-  if (className) element.className = className;
-  parent.appendChild(element);
-  return element;
-}
-
-function makeEntry(title, details, key, id, link = "") {
-  const entry = document.createElement("article");
-  entry.className = "entry";
-  addText(entry, "h3", title || "Untitled");
-  addText(entry, "p", details || "");
-
-  if (link) {
-    try {
-      const url = new URL(link);
-      if (url.protocol === "https:" || url.protocol === "http:") {
-        const anchor = document.createElement("a");
-        anchor.href = url.href;
-        anchor.target = "_blank";
-        anchor.rel = "noopener noreferrer";
-        anchor.textContent = "Open link";
-        entry.appendChild(anchor);
-      }
-    } catch {
-      addText(entry, "p", "Invalid link.");
+      document.querySelectorAll("#mainNav button").forEach(button => {
+        butto
+n => {
+          button.classList.toggle(
+            "active",
+            button.dataset.page === pageId
+          );
+        }
+      });
     }
-  }
 
-  const actions = document.createElement("div");
-  actions.className = "entry-actions";
+    document.querySelectorAll("#mainNav button").forEach(button => {
+      button.addEventListener("click", () => {
+        goToPage(button.dataset.page);
+      });
+    });
 
-  const remove = document.createElement("button");
-  remove.className = "danger";
-  remove.type = "button";
-  remove.textContent = "Delete";
-
-  remove.addEventListener("click", () => {
-    saveItems(
-      key,
-      readItems(key).filter(item => item.id !== id)
-    );
-    renderAll();
-  });
-
-  actions.appendChild(remove);
-  entry.appendChild(actions);
-  return entry;
-}
-
-function renderList(containerId, key, makeElement) {
-  const container = document.getElementById(containerId);
-  container.replaceChildren();
-  const items = readItems(key);
-
-  if (!items.length) {
-    addText(container, "p", "Nothing added yet.", "empty");
-    return;
-  }
-
-  items.forEach(item => container.appendChild(makeElement(item)));
-}
-
-function renderAll() {
-  renderList("reportList", "bgh_reports", item =>
-    makeEntry(
-      item.title,
-      [item.course, item.notes].filter(Boolean).join("\n"),
-      "bgh_reports", item.id, item.link
-    )
-  );
-
-  renderList("resourceList", "bgh_resources", item =>
-    makeEntry(
-      item.title, item.subject || "Study resource",
-      "bgh_resources", item.id, item.link
-    )
-  );
-
-  renderList("taskList", "bgh_tasks", item => {
-    const entry = makeEntry(
-      item.title,
-      "Due: " + (item.due || "No date set") +
-      "\nPriority: " + item.priority +
-      "\nStatus: " + (item.done ? "Completed" : "Pending"),
-      "bgh_tasks", item.id
-    );
-
-    const toggle = document.createElement("button");
-    toggle.className = "secondary";
-    toggle.type = "button";
-    toggle.textContent = item.done ? "Mark pending" : "Mark completed";
-
-    toggle.addEventListener("click", () => {
-      const tasks = readItems("bgh_tasks");
-      const task = tasks.find(x => x.id === item.id);
-      if (task) {
-        task.done = !task.done;
-        saveItems("bgh_tasks", tasks);
-        renderAll();
+    // LOGOUT
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error(error);
+        alert("Could not sign out. Please try again.");
       }
     });
 
-    entry.querySelector(".entry-actions").prepend(toggle);
-    return entry;
-  });
-
-  renderList("chatList", "bgh_messages", item =>
-    makeEntry(
-      item.name + " · " + item.time,
-      item.text, "bgh_messages", item.id
-    )
-  );
-
-  document.getElementById("reportCount").textContent =
-    readItems("bgh_reports").length;
-  document.getElementById("resourceCount").textContent =
-    readItems("bgh_resources").length;
-  document.getElementById("taskCount").textContent =
-    readItems("bgh_tasks").filter(task => !task.done).length;
-  document.getElementById("chatCount").textContent =
-    readItems("bgh_messages").length;
-}
-
-function addRecord(key, item) {
-  const items = readItems(key);
-  items.unshift({
-    id: Date.now().toString() + Math.random().toString(36).slice(2),
-    ...item
-  });
-  saveItems(key, items);
-  renderAll();
-}
-
-document.getElementById("reportForm").addEventListener("submit", event => {
-  event.preventDefault();
-  addRecord("bgh_reports", {
-    title: document.getElementById("reportTitle").value.trim(),
-    course: document.getElementById("reportCourse").value.trim(),
-    link: document.getElementById("reportLink").value.trim(),
-    notes: document.getElementById("reportNotes").value.trim()
-  });
-  event.target.reset();
-});
-
-document.getElementById("resourceForm").addEventListener("submit", event => {
-  event.preventDefault();
-  const link = document.getElementById("resourceLink").value.trim();
-
-  try {
-    const url = new URL(link);
-    if (!["https:", "http:"].includes(url.protocol)) {
-      alert("Enter a valid HTTP or HTTPS link.");
-      return;
+    // LOCAL STORAGE HELPERS
+    function loadData(key) {
+      try {
+        return JSON.parse(localStorage.getItem(key)) || [];
+      } catch {
+        return [];
+      }
     }
-  } catch {
-    alert("Enter a valid resource URL.");
-    return;
-  }
 
-  addRecord("bgh_resources", {
-    title: document.getElementById("resourceTitle").value.trim(),
-    subject: document.getElementById("resourceSubject").value.trim(),
-    link
-  });
-  event.target.reset();
-});
+    function saveData(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
 
-document.getElementById("taskForm").addEventListener("submit", event => {
-  event.preventDefault();
-  addRecord("bgh_tasks", {
-    title: document.getElementById("taskTitle").value.trim(),
-    due: document.getElementById("taskDue").value,
-    priority: document.getElementById("taskPriority").value,
-    done: false
-  });
-  event.target.reset();
-});
+    // REPORTS
+    function renderReports() {
+      const reports = loadData("bioReports");
+      const list = document.getElementById("reportsList");
 
-document.getElementById("chatForm").addEventListener("submit", event => {
-  event.preventDefault();
-  const user = auth.currentUser;
-  if (!user) return;
+      list.innerHTML = reports.length
+        ? reports.map((report, index) => `
+            <div class="item">
+              <strong>${escapeHTML(report.title)}</strong>
+              <p>${escapeHTML(report.details)}</p>
+              <small>${escapeHTML(report.date)}</small>
+              <button type="button" onclick="deleteReport(${index})">
+                Delete
+              </button>
+            </div>
+          `).join("")
+        : "<p>No reports added yet.</p>";
+    }
 
-  addRecord("bgh_messages", {
-    name: user.displayName || user.email || "Member",
-    text: document.getElementById("chatInput").value.trim(),
-    time: new Date().toLocaleString()
-  });
-  event.target.reset();
-});
+    window.deleteReport = function(index) {
+      const reports = loadData("bioReports");
+      reports.splice(index, 1);
+      saveData("bioReports", reports);
+      renderReports();
+    };
 
-// Jitsi video meetings
-function openMeeting(room) {
-  const cleanRoom = room.trim();
+    document.getElementById("reportForm").addEventListener("submit", event => {
+      event.preventDefault();
 
-  if (!/^[a-zA-Z0-9_-]{3,100}$/.test(cleanRoom)) {
-    alert("Use 3–100 letters, numbers, dashes or underscores.");
-    return;
-  }
+      const reports = loadData("bioReports");
+      reports.push({
+        title: document.getElementById("reportTitle").value.trim(),
+        details: document.getElementById("reportDetails").value.trim(),
+        date: new Date().toLocaleDateString()
+      });
 
-  window.open(
-    "https://meet.jit.si/" + encodeURIComponent(cleanRoom),
-    "_blank",
-    "noopener,noreferrer"
-  );
-}
+      saveData("bioReports", reports);
+      event.target.reset();
+      renderReports();
+    });
 
-document.getElementById("startMeeting").addEventListener("click", () => {
-  const room = "BioGroupHub-" +
-    Date.now().toString(36) + "-" +
-    Math.random().toString(36).slice(2, 10);
+    // RESOURCES
+    function renderResources() {
+      const resources = loadData("bioResources");
+      const list = document.getElementById("resourcesList");
 
-  if (confirm(
-    "Meeting room:\n" + room +
-    "\n\nAnyone with the link may be able to join. Open it?"
-  )) {
-    openMeeting(room);
-  }
-});
+      list.innerHTML = resources.length
+        ? resources.map(resource => `
+            <div class="item">
+              <strong>${escapeHTML(resource.title)}</strong>
+              <p><a href="${safeURL(resource.url)}" target="_blank"
+                rel="noopener noreferrer">Open resource</a></p>
+            </div>
+          `).join("")
+        : "<p>No resources added yet.</p>";
+    }
 
-document.getElementById("joinMeetingForm").addEventListener("submit", event => {
-  event.preventDefault();
-  openMeeting(document.getElementById("meetingRoom").value);
-});
+    document.getElementById("resourceForm").addEventListener("submit", event => {
+      event.preventDefault();
 
-renderAll();
-</script>
+      const title = document.getElementById("resourceTitle").value.trim();
+      const url = document.getElementById("resourceURL").value.trim();
 
+      if (!/^https?:\/\//i.test(url)) {
+        alert("Enter a complete link starting with https:// or http://");
+        return;
+      }
+
+      const resources = loadData("bioResources");
+      resources.push({ title, url });
+      saveData("bioResources", resources);
+
+      event.target.reset();
+      renderResources();
+    });
+
+    // TASKS
+    function renderTasks() {
+      const tasks = loadData("bioTasks");
+      const list = document.getElementById("tasksList");
+
+      list.innerHTML = tasks.length
+        ? tasks.map((task, index) => `
+            <div class="item">
+              <strong>${escapeHTML(task.title)}</strong>
+              <p>Deadline: ${escapeHTML(task.deadline || "Not set")}</p>
+              <button type="button" onclick="deleteTask(${index})">
+                Delete
+              </button>
+            </div>
+          `).join("")
+        : "<p>No tasks added yet.</p>";
+    }
+
+    window.deleteTask = function(index) {
+      const tasks = loadData("bioTasks");
+      tasks.splice(index, 1);
+      saveData("bioTasks", tasks);
+      renderTasks();
+    };
+
+    document.getElementById("taskForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const tasks = loadData("bioTasks");
+      tasks.push({
+        title: document.getElementById("taskTitle").value.trim(),
+        deadline: document.getElementById("taskDeadline").value
+      });
+
+      saveData("bioTasks", tasks);
+      event.target.reset();
+      renderTasks();
+    });
+
+    // GROUP CHAT DEMO — SAVED ONLY IN THIS BROWSER
+    function renderChat() {
+      const messages = loadData("bioChat");
+      const list = document.getElementById("chatMessages");
+
+      list.innerHTML = messages.map(item => `
+        <div class="item">
+          <strong>${escapeHTML(item.name)}</strong>
+          <p>${escapeHTML(item.text)}</p>
+          <small>${escapeHTML(item.time)}</small>
+        </div>
+      `).join("");
+
+      list.scrollTop = list.scrollHeight;
+    }
+
+    document.getElementById("chatForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const input = document.getElementById("chatInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const messages = loadData("bioChat");
+      messages.push({
+        name: auth.currentUser?.displayName || auth.currentUser?.email || "Member",
+        text,
+        time: new Date().toLocaleTimeString()
+      });
+
+      saveData("bioChat", messages);
+      input.value = "";
+      renderChat();
+    });
+
+    // MEETING LINK
+    document.getElementById("meetingBtn").addEventListener("click", () => {
+      const room = "BioGroupHubStudyRoom2026";
+      window.open(
+        "https://meet.jit.si/" + room,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    });
+
+    // SAFE TEXT AND URL HELPERS
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function safeURL(value) {
+      try {
+        const url = new URL(value);
+        return ["http:", "https:"].includes(url.protocol)
+          ? escapeHTML(url.href)
+          : "#";
+      } catch {
+        return "#";
+      }
+    }
+
+    // INITIAL RENDER
+    function renderAll() {
+      renderReports();
+      renderResources();
+      renderTasks();
+      renderChat();
+    }
+
+    renderAll();
+  </script>
 </body>
 </html>
