@@ -665,6 +665,50 @@
     }
   );
 </script>
+  
+<script type="module">
+  import {
+    auth,
+    createUserWithEmailAndPassword
+  } from "./firebase.js";
+
+  const registerForm = document.getElementById("register-form");
+  const registerMessage = document.getElementById("register-message");
+
+  if (registerForm) {
+    registerForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById("register-email").value.trim();
+      const password = document.getElementById("register-password").value;
+      const name = document.getElementById("register-name").value.trim();
+
+      registerMessage.textContent = "Creating account...";
+
+      try {
+        const result = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        await result.user.updateProfile?.({ displayName: name });
+
+        registerMessage.textContent =
+          "Account created successfully! You can now sign in.";
+        registerForm.reset();
+      } catch (error) {
+        registerMessage.textContent =
+          error.code === "auth/email-already-in-use"
+            ? "This email already has an account. Please sign in."
+            : error.code === "auth/weak-password"
+            ? "Please choose a stronger password."
+            : error.message;
+      }
+    });
+  }
+</script>
+  
 </body>
 </html>
 
