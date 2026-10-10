@@ -618,14 +618,14 @@
   }
 </script>
 
-  
-<script type="module">
   import {
-    auth,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-  } from "./firebase.js";
+  auth,
+  createUserWithEmailAndPassword
+} from "./firebase.js";
+
+import { updateProfile } from
+  "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
 
   const authScreen = document.getElementById("authScreen");
   const main = document.querySelector("main");
@@ -692,7 +692,7 @@
           password
         );
 
-        await result.user.updateProfile?.({ displayName: name });
+        await updateProfile(result.user, { displayName: name });
 
         registerMessage.textContent =
           "Account created successfully! You can now sign in.";
