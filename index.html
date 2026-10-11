@@ -1213,24 +1213,28 @@
 
       try {
         await loadJitsi();
+        
+jitsiApi = new window.JitsiMeetExternalAPI("meet.jit.si", {
+  roomName: room,
+  parentNode: container,
+  width: "100%",
+  height: 420,
 
-        jitsiApi = new window.JitsiMeetExternalAPI("meet.jit.si", {
-          roomName: room,
-          parentNode: container,
-          width: "100%",
-          height: 420,
-          userInfo: {
-            displayName:
-              currentUser.displayName || currentUser.email || "BioGroup member"
-          },
-          configOverwrite: {
-            prejoinPageEnabled: true
-          },
-          interfaceConfigOverwrite: {
-            SHOW_JITSI_WATERMARK: false
-          }
-        });
+  userInfo: {
+    displayName:
+      currentUser.displayName ||
+      currentUser.email ||
+      "BioGroup member"
+  },
 
+  configOverwrite: {
+    prejoinPageEnabled: true
+  },
+
+  interfaceConfigOverwrite: {
+    SHOW_JITSI_WATERMARK: false
+  }
+});
         jitsiApi.addEventListener("videoConferenceJoined", () => {
           status("meetingStatus", "You joined the meeting.");
           $("joinMeetingBtn").classList.add("hidden");
