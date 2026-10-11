@@ -2,1029 +2,1299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#073b2d">
-<title>BioGroup Hub</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071426">
+  <title>BioGroup Hub | Biology Community</title>
 
-<script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+  <style>
+    :root {
+      --bg: #071426;
+      --panel: #102139;
+      --panel-light: #172d48;
+      --blue: #38bdf8;
+      --green: #34d399;
+      --text: #f1f5f9;
+      --muted: #9fb0c5;
+      --border: rgba(255,255,255,.10);
+      --danger: #fb7185;
+      --radius: 18px;
+    }
 
-<style>
-:root {
-  --green:#087f5b;
-  --dark:#073b2d;
-  --mint:#e1f8ed;
-  --bg:#f3f7f5;
-  --ink:#18352b;
-  --muted:#718078;
-  --line:#e0e9e4;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:Arial,sans-serif;
-}
-button,input,textarea { font:inherit; }
-button { cursor:pointer; }
-.hidden { display:none!important; }
+    * {
+      box-sizing: border-box;
+    }
 
-header {
-  background:white;
-  padding:15px 5%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid var(--line);
-  position:sticky;
-  top:0;
-  z-index:5;
-}
-.brand {
-  font-size:20px;
-  font-weight:bold;
-  color:var(--dark);
-}
-.brand small {
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  margin-top:4px;
-}
-nav {
-  display:flex;
-  gap:6px;
-  overflow-x:auto;
-  background:white;
-  padding:10px 4%;
-  border-bottom:1px solid var(--line);
-}
-nav button {
-  flex-shrink:0;
-  border:0;
-  border-radius:10px;
-  background:white;
-  padding:12px;
-  color:var(--muted);
-  font-weight:bold;
-}
-nav button.active,
-nav button:hover {
-  background:var(--mint);
-  color:var(--dark);
-}
-.container {
-  width:min(1050px,92%);
-  margin:24px auto 50px;
-}
-.card {
-  background:white;
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:21px;
-  margin-bottom:17px;
-  box-shadow:0 8px 25px #073b2d09;
-}
-h1 { font-size:clamp(26px,5vw,37px); margin-top:0; }
-h2 { font-size:22px; margin-top:0; }
-p { line-height:1.6; }
-.muted { color:var(--muted); }
-.small { font-size:13px; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #123052 0, transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
 
-.hero {
-  padding:35px 25px;
-  border-radius:23px;
-  background:radial-gradient(circle at 85% 10%,#20b780,transparent 32%),linear-gradient(125deg,#073b2d,#087f5b);
-  color:white;
-  margin-bottom:20px;
-}
-.hero p { color:#e1fff0; }
+    button, input, textarea {
+      font: inherit;
+    }
 
-.stats,.grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-}
-.stat,.action {
-  background:white;
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:18px;
-}
-.stat strong {
-  display:block;
-  color:var(--green);
-  font-size:30px;
-  margin-top:8px;
-}
-.action {
-  width:100%;
-  text-align:left;
-  color:var(--ink);
-  transition:.15s;
-}
-.action:hover {
-  border-color:var(--green);
-  transform:translateY(-2px);
-}
-.action span {
-  display:block;
-  font-size:27px;
-  margin-bottom:10px;
-}
-.action strong { display:block; margin-bottom:6px; }
-.action p { font-size:13px; color:var(--muted); margin-bottom:0; }
+    button {
+      cursor: pointer;
+    }
 
-.btn {
-  border:0;
-  border-radius:10px;
-  padding:12px 16px;
-  background:var(--green);
-  color:white;
-  font-weight:bold;
-}
-.btn.light { background:var(--mint); color:var(--dark); }
-.btn.red { background:#bd3546; color:white; }
-.btn:disabled { opacity:.6; }
+    .hidden {
+      display: none !important;
+    }
 
-label {
-  display:block;
-  font-size:14px;
-  font-weight:bold;
-  margin:14px 0 7px;
-}
-input,textarea {
-  width:100%;
-  padding:13px;
-  border:1px solid #d6e3dc;
-  border-radius:10px;
-  background:white;
-  color:var(--ink);
-}
-textarea { min-height:85px; resize:vertical; }
-input:focus,textarea:focus {
-  outline:2px solid #a5e8c7;
-  border-color:var(--green);
-}
-.auth {
-  width:min(440px,92%);
-  margin:40px auto;
-}
-.auth .card { padding:25px; }
-.auth-switch {
-  background:none;
-  border:0;
-  color:var(--green);
-  font-weight:bold;
-}
-.notice {
-  background:#f0f8f3;
-  border:1px solid #d5ecdf;
-  border-radius:11px;
-  padding:12px;
-  font-size:13px;
-  line-height:1.5;
-}
-.message {
-  padding:12px;
-  background:#fff0f0;
-  color:#a12636;
-  border-radius:10px;
-  margin-top:12px;
-  overflow-wrap:anywhere;
-}
-.success { background:#e2f8eb; color:#075e42; }
+    .muted {
+      color: var(--muted);
+    }
 
-.report {
-  background:white;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:16px;
-  margin-top:12px;
-  overflow-wrap:anywhere;
-}
-.report a {
-  color:var(--green);
-  font-weight:bold;
-  text-decoration:none;
-}
-.avatar {
-  width:60px;
-  height:60px;
-  border-radius:18px;
-  background:var(--mint);
-  display:grid;
-  place-items:center;
-  font-size:30px;
-  margin-bottom:15px;
-}
-.chat-message {
-  padding:13px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  margin:10px 0;
-  overflow-wrap:anywhere;
-}
-footer {
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:18px;
-}
+    .status {
+      min-height: 20px;
+      margin: 10px 0;
+      color: var(--blue);
+      font-size: .9rem;
+      overflow-wrap: anywhere;
+    }
 
-/* Full-screen video call */
-#dailyContainer.daily-fullscreen {
-  display:block!important;
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  width:100vw!important;
-  height:100vh!important;
-  height:100dvh!important;
-  max-height:none;
-  background:#101b17;
-  border-radius:0;
-  overflow:hidden;
-}
-#dailyFrameMount {
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-}
-#dailyFrameMount iframe {
-  width:100%!important;
-  height:100%!important;
-  border:0;
-}
-.daily-call-topbar {
-  position:absolute;
-  z-index:5;
-  top:0;
-  left:0;
-  right:0;
-  padding:max(14px,env(safe-area-inset-top)) 16px 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  color:white;
-  background:linear-gradient(#07120fcc,transparent);
-  pointer-events:none;
-}
-.daily-call-topbar>* { pointer-events:auto; }
-.daily-call-title { font-weight:bold; font-size:15px; }
-.daily-call-subtitle {
-  font-size:12px;
-  color:#c5d8cf;
-  margin-top:4px;
-}
-.daily-call-close {
-  width:44px;
-  height:44px;
-  border:0;
-  border-radius:50%;
-  color:white;
-  background:#ffffff24;
-  font-size:25px;
-}
-body.call-open { overflow:hidden; }
+    .page {
+      width: min(100% - 28px, 1050px);
+      margin: 0 auto;
+      padding: 24px 0 100px;
+    }
 
-.meeting-card {
-  background:#071f19;
-  color:white;
-  border-radius:23px;
-  padding:22px;
-}
-.meeting-card p { color:#b6d0c4; }
-.meeting-card input {
-  background:#102f25;
-  color:white;
-  border-color:#315448;
-}
-.meeting-card input::placeholder { color:#b6c9c0; }
-.meeting-buttons {
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-  margin:14px 0;
-}
-.meeting-buttons .btn { flex:1; }
-.meeting-placeholder {
-  min-height:230px;
-  border:1px solid #244b3d;
-  border-radius:17px;
-  background:radial-gradient(ellipse at center,#164d3b,#0b241c 70%);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:20px;
-}
-.meeting-placeholder .emoji { font-size:48px; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
 
-@media(max-width:560px) {
-  header { padding:12px 4%; }
-  .brand { font-size:17px; }
-  .container { margin-top:17px; }
-  .card { padding:16px; }
-  .grid { grid-template-columns:1fr; }
-  .hero { padding:26px 20px; }
-  .meeting-card { padding:15px; }
-  .meeting-buttons .btn { min-width:40%; }
-}
-</style>
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      color: #061426;
+      font-size: 27px;
+      flex-shrink: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 5vw, 2rem);
+      letter-spacing: -.6px;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .panel {
+      background: rgba(16, 33, 57, .94);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.18);
+    }
+
+    .auth-wrap {
+      width: min(100%, 440px);
+      margin: 35px auto;
+    }
+
+    .auth-wrap h2 {
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+    }
+
+    .auth-wrap > p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin: 16px 0;
+    }
+
+    .field label {
+      color: #dce7f5;
+      font-size: .9rem;
+    }
+
+    .field input,
+    .field textarea,
+    .text-input {
+      width: 100%;
+      min-width: 0;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #08172a;
+      color: var(--text);
+      outline: none;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .text-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(56,189,248,.12);
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .danger-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 700;
+    }
+
+    .primary-btn {
+      background: linear-gradient(100deg, var(--blue), var(--green));
+      color: #061426;
+    }
+
+    .secondary-btn {
+      background: var(--panel-light);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .danger-btn {
+      background: rgba(251,113,133,.13);
+      color: #fecdd3;
+      border: 1px solid rgba(251,113,133,.3);
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .link-btn {
+      padding: 8px 0;
+      background: none;
+      border: 0;
+      color: var(--blue);
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .app-header h2 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .online {
+      color: var(--green);
+      font-size: .85rem;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 1.2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .info-card {
+      min-width: 0;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: var(--panel-light);
+    }
+
+    .info-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .list-item {
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 180px;
+      max-height: 48vh;
+      overflow-y: auto;
+      padding: 12px 0;
+    }
+
+    .message {
+      max-width: 92%;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--panel-light);
+      overflow-wrap: anywhere;
+    }
+
+    .message strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--green);
+      font-size: .82rem;
+    }
+
+    .message p {
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    .message small {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+
+    .chat-form,
+    .inline-form {
+      display: flex;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .chat-form input,
+    .inline-form input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .meeting-box {
+      width: 100%;
+      min-height: 300px;
+      margin-top: 14px;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #020817;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-around;
+      gap: 4px;
+      padding: 9px 6px calc(9px + env(safe-area-inset-bottom));
+      background: rgba(7,20,38,.96);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(15px);
+    }
+
+    .nav-btn {
+      flex: 1;
+      max-width: 130px;
+      padding: 9px 4px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      font-size: .75rem;
+    }
+
+    .nav-btn.active {
+      background: var(--panel-light);
+      color: var(--blue);
+    }
+
+    @media (max-width: 520px) {
+      .page {
+        width: min(100% - 20px, 1050px);
+        padding-top: 18px;
+      }
+
+      .panel {
+        padding: 15px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-form,
+      .inline-form {
+        flex-wrap: wrap;
+      }
+
+      .chat-form button,
+      .inline-form button {
+        flex-shrink: 0;
+      }
+
+      .meeting-box {
+        min-height: 250px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    🧬 BioGroup Hub
-    <small>Learn together. Discover together.</small>
-  </div>
-  <button id="logoutButton" class="btn light hidden" type="button">
-    Sign out
-  </button>
-</header>
-
-<section id="authScreen" class="auth">
-  <div class="card">
-    <h1 id="authTitle">Welcome back</h1>
-    <p class="muted">Your biology group's online workspace.</p>
-
-    <form id="loginForm">
-      <label for="loginEmail">Email</label>
-      <input id="loginEmail" type="email" autocomplete="email" required>
-
-      <label for="loginPassword">Password</label>
-      <input id="loginPassword" type="password" autocomplete="current-password" required>
-
-      <button class="btn" style="width:100%;margin-top:18px" type="submit">
-        Sign in
-      </button>
-    </form>
-
-    <form id="registerForm" class="hidden">
-      <label for="registerName">Full name</label>
-      <input id="registerName" maxlength="70" required>
-
-      <label for="registerEmail">Email</label>
-      <input id="registerEmail" type="email" autocomplete="email" required>
-
-      <label for="registerPassword">Password (at least 6 characters)</label>
-      <input id="registerPassword" type="password" minlength="6" autocomplete="new-password" required>
-
-      <button class="btn" style="width:100%;margin-top:18px" type="submit">
-        Create account
-      </button>
-    </form>
-
-    <p id="authSwitchText" class="small muted">
-      New member?
-      <button id="authSwitch" class="auth-switch" type="button">Create an account</button>
-    </p>
-    <div id="authMessage" class="message hidden"></div>
-  </div>
-</section>
-
-<div id="appScreen" class="hidden">
-<nav id="mainNav">
-  <button class="active" data-page="home" type="button">⌂ Home</button>
-  <button data-page="reports" type="button">📄 Lab Reports</button>
-  <button data-page="chat" type="button">💬 Group Chat</button>
-  <button data-page="meetings" type="button">🎥 Meetings</button>
-  <button data-page="members" type="button">👤 Members</button>
-</nav>
-
-<main class="container">
-<section id="homePage" class="page">
-  <div class="hero">
-    <p style="letter-spacing:2px;font-size:12px;font-weight:bold">YOUR BIOLOGY WORKSPACE</p>
-    <h1>Think together.<br>Discover more.</h1>
-    <p>Share lab reports, exchange ideas and meet your biology group online.</p>
-    <button class="btn light" data-go="reports" type="button">＋ Share a lab report</button>
-  </div>
-
-  <div class="stats">
-    <div class="stat">Lab reports shared<strong id="reportCount">0</strong></div>
-    <div class="stat">Saved chat messages<strong id="chatCount">0</strong></div>
-  </div>
-
-  <h2>Quick access</h2>
-  <div class="grid">
-    <button class="action" data-go="reports" type="button">
-      <span>📄</span><strong>Lab Reports</strong>
-      <p>Share report links with your group.</p>
-    </button>
-    <button class="action" data-go="chat" type="button">
-      <span>💬</span><strong>Group Chat</strong>
-      <p>Discuss biology and practical work.</p>
-    </button>
-    <button class="action" data-go="meetings" type="button">
-      <span>🎥</span><strong>Video Meetings</strong>
-      <p>Meet online and present your work.</p>
-    </button>
-    <button class="action" data-go="members" type="button">
-      <span>🧑‍🔬</span><strong>My Profile</strong>
-      <p>View your signed-in account.</p>
-    </button>
-  </div>
-</section>
-
-<section id="reportsPage" class="page hidden">
-  <div class="card">
-    <h1>📄 Lab Reports</h1>
-    <p class="muted">Share practical reports using Google Drive links.</p>
-    <div class="notice">
-      Upload your report to Google Drive first. Set appropriate sharing permissions, copy its share link, and paste it below.
-    </div>
-
-    <form id="reportForm">
-      <label for="reportTitle">Report title</label>
-      <input id="reportTitle" maxlength="120" placeholder="e.g. Cell Biology Practical 1" required>
-
-      <label for="reportCourse">Course / unit</label>
-      <input id="reportCourse" maxlength="100" placeholder="e.g. Cell Biology" required>
-
-      <label for="reportDescription">Description</label>
-      <textarea id="reportDescription" maxlength="1000" placeholder="Describe the report"></textarea>
-
-      <label for="reportLink">Google Drive share link</label>
-      <input id="reportLink" type="url" placeholder="https://drive.google.com/..." required>
-
-      <button class="btn" type="submit">Share report link</button>
-    </form>
-    <div id="reportMessage" class="message hidden"></div>
-  </div>
-
-  <div class="card">
-    <h2>Shared reports</h2>
-    <div id="reportsList"><p class="muted">Loading reports...</p></div>
-  </div>
-</section>
-
-<section id="chatPage" class="page hidden">
-  <div class="card">
-    <h1>💬 Group Chat</h1>
-    <div class="notice">
-      Current version: messages are saved in this browser on this device only. They are not shared live with other members yet.
-    </div>
-
-    <div id="chatMessages" style="margin-top:18px">
-      <p class="muted">No messages yet. Start the discussion.</p>
-    </div>
-
-    <form id="chatForm">
-      <label for="chatInput">Your message</label>
-      <textarea id="chatInput" maxlength="2000" placeholder="Ask a question or share an idea..." required></textarea>
-      <button class="btn" type="submit">Send message</button>
-      <button class="btn light" id="clearChat" type="button">Clear this device's chat</button>
-    </form>
-  </div>
-</section>
-
-<section id="meetingsPage" class="page hidden">
-  <div class="meeting-card">
-    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <div>
-        <h1>🎥 Biology Meeting Room</h1>
-        <p>Video calls inside BioGroup Hub.</p>
+  <section id="authScreen" class="page">
+    <div class="auth-wrap">
+      <div class="brand">
+        <div class="brand-icon">🧬</div>
+        <div>
+          <h1>BioGroup Hub</h1>
+          <p>Learn together. Discover together.</p>
+        </div>
       </div>
-      <span id="meetingStatus" class="small">Ready to connect</span>
+
+      <div class="panel">
+        <h2 id="authTitle">Welcome back</h2>
+        <p id="authDescription">
+          Your biology group's online workspace.
+        </p>
+
+        <form id="authForm">
+          <div class="field">
+            <label for="displayName">Full name</label>
+            <input
+              id="displayName"
+              type="text"
+              placeholder="Enter your name"
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              minlength="6"
+              required
+            >
+          </div>
+
+          <button class="primary-btn full-width" id="authSubmit" type="submit">
+            Sign in
+          </button>
+
+          <p id="authStatus" class="status" role="status"></p>
+        </form>
+
+        <button id="authSwitch" class="link-btn" type="button">
+          New member? Create an account
+        </button>
+      </div>
     </div>
+  </section>
+  
+  <main id="appScreen" class="page hidden">
 
-    <label for="roomInput">Meeting room</label>
-    <input id="roomInput" maxlength="80" value="biogroup-study" placeholder="Biology meeting room">
+    <header id="appHeader" class="app-header">
+      <div class="brand">
+        <div class="brand-icon">🧬</div>
+        <div>
+          <h1>BioGroup Hub</h1>
+          <p>Learn together. Discover together.</p>
+        </div>
+      </div>
 
-    <div class="notice" style="margin-top:14px">
-      Your meeting opens in a full-screen layout. Use the meeting controls for your camera, microphone, participants and screen sharing when supported.
-    </div>
+      <div>
+        <span class="online">● Online</span>
+        <button id="signOutBtn" class="secondary-btn" type="button">
+          Sign out
+        </button>
+      </div>
+    </header>
 
-    <div class="meeting-buttons">
-      <button class="btn" id="startMeeting" type="button">Start Meeting</button>
-      <button class="btn light" id="joinMeeting" type="button">Join Meeting</button>
-      <button class="btn light" id="openMeeting" type="button">Open Room Link</button>
-      <button class="btn red hidden" id="leaveMeeting" type="button">Leave Call</button>
-    </div>
+    <!-- HOME -->
+    <section id="homeSection" class="section">
+      <div class="panel">
+        <h2 class="section-title">Welcome to your biology hub</h2>
+        <p class="muted">
+          Connect with your classmates, discuss biology, share lab reports,
+          and meet online.
+        </p>
+      </div>
 
-    <div id="meetingPlaceholder" class="meeting-placeholder">
-      <div class="emoji">🧬</div>
-      <h2>Your virtual biology laboratory</h2>
-      <p>Start or join a meeting to see the video-call screen.</p>
-    </div>
+      <div class="grid" style="margin-top:14px">
+        <article class="info-card">
+          <h3>💬 Group Chat</h3>
+          <p>Discuss concepts and share ideas with your group.</p>
+          <button class="link-btn" data-section="chat" type="button">
+            Open chat →
+          </button>
+        </article>
 
-    <div id="dailyContainer" class="hidden"></div>
-  </div>
-</section>
+        <article class="info-card">
+          <h3>📄 Lab Reports</h3>
+          <p>Access shared report links and study documents.</p>
+          <button class="link-btn" data-section="reports" type="button">
+            View reports →
+          </button>
+        </article>
 
-<section id="membersPage" class="page hidden">
-  <div class="card">
-    <div class="avatar">🧑‍🔬</div>
-    <h1>Member Profile</h1>
-    <p class="muted">Your signed-in BioGroup Hub account.</p>
+        <article class="info-card">
+          <h3>🎥 Meetings</h3>
+          <p>Join an online group meeting.</p>
+          <button class="link-btn" data-section="meetings" type="button">
+            Open meetings →
+          </button>
+        </article>
 
-    <label>Full name</label>
-    <p id="memberName">Loading...</p>
+        <article class="info-card">
+          <h3>👥 Members</h3>
+          <p>See registered members of BioGroup Hub.</p>
+          <button class="link-btn" data-section="members" type="button">
+            View members →
+          </button>
+        </article>
+      </div>
+    </section>
 
-    <label>Email address</label>
-    <p id="memberEmail">Loading...</p>
+    <!-- CHAT -->
+    <section id="chatSection" class="section hidden">
+      <div class="panel">
+        <h2 class="section-title">💬 Group Chat</h2>
+        <p class="muted">
+          Keep discussions respectful and focused on learning.
+        </p>
 
-    <div class="notice">
-      Keep your password private. Firebase sign-in alone does not make the Daily meeting room private.
-    </div>
-  </div>
-</section>
-</main>
+        <div id="chatMessages" class="chat-messages">
+          <p class="muted">Loading messages...</p>
+        </div>
 
-<footer>BioGroup Hub · Biology students learning together</footer>
-</div>
+        <form id="chatForm" class="chat-form">
+          <input
+            id="chatInput"
+            class="text-input"
+            type="text"
+            maxlength="1500"
+            placeholder="Write a message..."
+            aria-label="Chat message"
+            required
+          >
+          <button class="primary-btn" type="submit">Send</button>
+        </form>
 
-<script type="module">
+        <p id="chatStatus" class="status" role="status"></p>
+      </div>
+    </section>
 
-import {
-  auth,
-  db,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  updateProfile,
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  serverTimestamp
-} from "./firebase.js";
+    <!-- REPORTS -->
+    <section id="reportsSection" class="section hidden">
+      <div class="panel">
+        <h2 class="section-title">📄 Lab Reports</h2>
+        <p class="muted">
+          Share a Google Drive link to a lab report or study document.
+          Set the Drive sharing permissions so intended group members can
+          access the document.
+        </p>
 
-const $ = id => document.getElementById(id);
+        <form id="reportForm">
+          <div class="field">
+            <label for="reportTitle">Report title</label>
+            <input
+              id="reportTitle"
+              type="text"
+              maxlength="120"
+              placeholder="e.g. Cell Biology Practical"
+              required
+            >
+          </div>
 
-let currentUser = null;
-let showingRegister = false;
-let reportsUnsubscribe = null;
-let dailyCall = null;
-let dailyStarting = false;
+          <div class="field">
+            <label for="reportUrl">Google Drive link</label>
+            <input
+              id="reportUrl"
+              type="url"
+              placeholder="https://drive.google.com/..."
+              required
+            >
+          </div>
 
-/* IMPORTANT: Replace this with your actual Daily room URL. */
+          <div class="field">
+            <label for="reportDescription">Description (optional)</label>
+            <textarea
+              id="reportDescription"
+              rows="3"
+              maxlength="500"
+              placeholder="Add a short description"
+            ></textarea>
+          </div>
 
-const DAILY_ROOM_URL =
-  "https://biohub.daily.co/biogroup-study";
+          <button class="primary-btn" type="submit">
+            Share report
+          </button>
 
+          <p id="reportStatus" class="status" role="status"></p>
+        </form>
+      </div>
 
-function showMessage(id, text, success = false) {
-  const element = $(id);
-  element.textContent = text;
-  element.classList.remove("hidden", "success");
-  if (success) element.classList.add("success");
-}
+      <div class="panel" style="margin-top:14px">
+        <h3 class="section-title">Shared documents</h3>
+        <div id="reportsList" class="list">
+          <p class="muted">Loading reports...</p>
+        </div>
+      </div>
+    </section>
 
-function hideMessage(id) {
-  $(id).classList.add("hidden");
-}
+    <!-- MEETINGS -->
+    <section id="meetingsSection" class="section hidden">
+      <div class="panel">
+        <h2 class="section-title">🎥 Group Meetings</h2>
+        <p class="muted">
+          Start or join a meeting using a shared room name.
+        </p>
 
-/* LOGIN AND REGISTRATION */
-$("authSwitch").addEventListener("click", () => {
-  showingRegister = !showingRegister;
+        <div class="field">
+          <label for="roomName">Meeting room name</label>
+          <input
+            id="roomName"
+            type="text"
+            maxlength="80"
+            placeholder="e.g. BioGroupCellStudy"
+          >
+        </div>
 
-  $("loginForm").classList.toggle("hidden", showingRegister);
-  $("registerForm").classList.toggle("hidden", !showingRegister);
+        <button id="joinMeetingBtn" class="primary-btn" type="button">
+          Join meeting
+        </button>
 
-  $("authTitle").textContent =
-    showingRegister ? "Create your account" : "Welcome back";
+        <button id="leaveMeetingBtn"
+          class="danger-btn hidden" type="button">
+          Leave meeting
+        </button>
 
-  $("authSwitchText").firstChild.textContent =
-    showingRegister ? "Already registered? " : "New member? ";
+        <p id="meetingStatus" class="status" role="status"></p>
 
-  $("authSwitch").textContent =
-    showingRegister ? "Sign in" : "Create an account";
+        <div id="jitsiContainer" class="meeting-box"></div>
 
-  hideMessage("authMessage");
-});
+        <p class="muted">
+          Meeting rooms use a third-party service. A room name is not a
+          security password; avoid sharing sensitive information.
+        </p>
+      </div>
+    </section>
 
-$("loginForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  hideMessage("authMessage");
+    <!-- MEMBERS -->
+    <section id="membersSection" class="section hidden">
+      <div class="panel">
+        <h2 class="section-title">👥 Group Members</h2>
+        <p class="muted">
+          Registered BioGroup Hub accounts.
+        </p>
 
-  try {
-    await signInWithEmailAndPassword(
+        <div id="membersList" class="list">
+          <p class="muted">Loading members...</p>
+        </div>
+
+        <p id="membersStatus" class="status" role="status"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM NAVIGATION -->
+  <nav id="bottomNav" class="bottom-nav hidden"
+    aria-label="Main navigation">
+    <button class="nav-btn active" data-section="home" type="button">
+      🏠<br>Home
+    </button>
+
+    <button class="nav-btn" data-section="chat" type="button">
+      💬<br>Chat
+    </button>
+
+    <button class="nav-btn" data-section="reports" type="button">
+      📄<br>Reports
+    </button>
+
+    <button class="nav-btn" data-section="meetings" type="button">
+      🎥<br>Meetings
+    </button>
+
+    <button class="nav-btn" data-section="members" type="button">
+      👥<br>Members
+    </button>
+  </nav>
+  
+  <!-- Part 3 will add the Firebase-powered JavaScript here. -->
+
+  <script type="module">
+    import {
       auth,
-      $("loginEmail").value.trim(),
-      $("loginPassword").value
-    );
-  } catch (error) {
-    showMessage("authMessage", error.message);
-  }
-});
+      db,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updateProfile,
+      collection,
+      addDoc,
+      query,
+      orderBy,
+      onSnapshot,
+      serverTimestamp
+    } from "./firebase.js";
 
-$("registerForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  hideMessage("authMessage");
+    import {
+      doc,
+      setDoc,
+      limit
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-  const name = $("registerName").value.trim();
+    const $ = (id) => document.getElementById(id);
 
-  try {
-    const credential = await createUserWithEmailAndPassword(
-      auth,
-      $("registerEmail").value.trim(),
-      $("registerPassword").value
-    );
+    let isRegistering = false;
+    let currentUser = null;
+    let unsubscribeChat = null;
+    let unsubscribeReports = null;
+    let unsubscribeMembers = null;
+    let jitsiApi = null;
+    let jitsiLoading = null;
 
-    await updateProfile(credential.user, {
-      displayName: name
+    function status(id, message, isError = false) {
+      const element = $(id);
+      if (!element) return;
+      element.textContent = message;
+      element.style.color = isError ? "#fb7185" : "#38bdf8";
+    }
+
+    function safeText(value) {
+      return String(value ?? "");
+    }
+
+    function makeElement(tag, className, text) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      if (text !== undefined) element.textContent = text;
+      return element;
+    }
+
+    function showAuth() {
+      $("authScreen").classList.remove("hidden");
+      $("appScreen").classList.add("hidden");
+      $("bottomNav").classList.add("hidden");
+    }
+
+    function showApp() {
+      $("authScreen").classList.add("hidden");
+      $("appScreen").classList.remove("hidden");
+      $("bottomNav").classList.remove("hidden");
+    }
+
+    function stopListeners() {
+      if (unsubscribeChat) unsubscribeChat();
+      if (unsubscribeReports) unsubscribeReports();
+      if (unsubscribeMembers) unsubscribeMembers();
+
+      unsubscribeChat = null;
+      unsubscribeReports = null;
+      unsubscribeMembers = null;
+    }
+
+    function showSection(name) {
+      const validSections = [
+        "home",
+        "chat",
+        "reports",
+        "meetings",
+        "members"
+      ];
+
+      if (!validSections.includes(name)) name = "home";
+
+      validSections.forEach((section) => {
+        const element = $(section + "Section");
+        if (element) {
+          element.classList.toggle("hidden", section !== name);
+        }
+      });
+
+      document.querySelectorAll(".nav-btn").forEach((button) => {
+        button.classList.toggle(
+          "active",
+          button.dataset.section === name
+        );
+      });
+    }
+
+    document.querySelectorAll("[data-section]").forEach((button) => {
+      button.addEventListener("click", () => {
+        showSection(button.dataset.section);
+      });
     });
-  } catch (error) {
-    showMessage("authMessage", error.message);
-  }
-});
 
-/* NAVIGATION */
-function openPage(name) {
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.add("hidden");
-  });
+    $("authSwitch").addEventListener("click", () => {
+      isRegistering = !isRegistering;
 
-  const page = $(name + "Page");
-  if (page) page.classList.remove("hidden");
+      $("authTitle").textContent =
+        isRegistering ? "Create your account" : "Welcome back";
 
-  document.querySelectorAll("#mainNav button").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === name);
-  });
-}
+      $("authDescription").textContent =
+        isRegistering
+          ? "Join your biology group's online workspace."
+          : "Your biology group's online workspace.";
 
-document.querySelectorAll("#mainNav button").forEach(button => {
-  button.addEventListener("click", () => openPage(button.dataset.page));
-});
+      $("displayName").required = isRegistering;
+      $("displayName").classList.toggle("hidden", !isRegistering);
 
-document.querySelectorAll("[data-go]").forEach(button => {
-  button.addEventListener("click", () => openPage(button.dataset.go));
-});
+      const nameLabel = document.querySelector(
+        'label[for="displayName"]'
+      );
+      if (nameLabel) nameLabel.classList.toggle("hidden", !isRegistering);
 
-/* FIREBASE AUTH STATE */
-onAuthStateChanged(auth, user => {
-  currentUser = user;
+      $("password").autocomplete =
+        isRegistering ? "new-password" : "current-password";
 
-  $("authScreen").classList.toggle("hidden", !!user);
-  $("appScreen").classList.toggle("hidden", !user);
-  $("logoutButton").classList.toggle("hidden", !user);
+      $("authSubmit").textContent =
+        isRegistering ? "Create account" : "Sign in";
 
-  if (!user) {
-    if (reportsUnsubscribe) {
-      reportsUnsubscribe();
-      reportsUnsubscribe = null;
-    }
-    closeDailyCall();
-    return;
-  }
+      $("authSwitch").textContent =
+        isRegistering
+          ? "Already registered? Sign in"
+          : "New member? Create an account";
 
-  $("memberName").textContent = user.displayName || "BioGroup member";
-  $("memberEmail").textContent = user.email || "";
+      status("authStatus", "");
+    });
 
-  loadReports();
-  renderChat();
-});
+    // Authentication: registration and sign-in
+    $("authForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-$("logoutButton").addEventListener("click", async () => {
-  closeDailyCall();
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      const displayName = $("displayName").value.trim();
 
-  try {
-    await signOut(auth);
-  } catch (error) {
-    alert("Could not sign out: " + error.message);
-  }
-});
-
-/* GOOGLE DRIVE REPORT LINKS */
-function loadReports() {
-  if (reportsUnsubscribe) reportsUnsubscribe();
-
-  const reportsQuery = query(
-    collection(db, "reports"),
-    orderBy("createdAt", "desc")
-  );
-
-  reportsUnsubscribe = onSnapshot(reportsQuery, snapshot => {
-    $("reportCount").textContent = snapshot.size;
-
-    const list = $("reportsList");
-    list.replaceChildren();
-
-    if (snapshot.empty) {
-      list.textContent = "No reports shared yet.";
-      return;
-    }
-
-    snapshot.forEach(item => {
-      const report = item.data();
-      const article = document.createElement("article");
-      article.className = "report";
-
-      const title = document.createElement("h3");
-      title.textContent = report.title || "Untitled report";
-
-      const course = document.createElement("p");
-      course.textContent = "Unit: " + (report.course || "Not specified");
-
-      const description = document.createElement("p");
-      description.textContent = report.description || "";
-
-      const author = document.createElement("p");
-      author.className = "muted small";
-      author.textContent = "Shared by " + (report.authorName || "Member");
-
-      article.append(title, course, description, author);
+      $("authSubmit").disabled = true;
+      status("authStatus", "Please wait...");
 
       try {
-        const url = new URL(report.link || "");
+        if (isRegistering) {
+          if (!displayName) {
+            throw new Error("Please enter your full name.");
+          }
 
-        if (
-          url.protocol === "https:" &&
-          ["drive.google.com", "docs.google.com"].includes(url.hostname)
-        ) {
-          const link = document.createElement("a");
-          link.href = url.href;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = "Open report ↗";
-          article.appendChild(link);
+          const credential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          await updateProfile(credential.user, { displayName });
+
+          try {
+            await setDoc(doc(db, "users", credential.user.uid), {
+              displayName,
+              email,
+              joinedAt: serverTimestamp()
+            });
+          } catch (profileError) {
+            console.error("Profile document could not be saved:", profileError);
+            status(
+              "authStatus",
+              "Account created, but the member profile could not be saved. Check Firestore rules."
+            );
+          }
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
         }
-      } catch {}
+      } catch (error) {
+        console.error(error);
 
-      list.appendChild(article);
-    });
-  }, error => {
-    console.error("Reports loading error:", error);
-    $("reportsList").textContent =
-      "Could not load reports. Check Firestore setup and security rules.";
-  });
-}
+        const messages = {
+          "auth/email-already-in-use": "That email already has an account.",
+          "auth/invalid-email": "Enter a valid email address.",
+          "auth/weak-password": "Choose a stronger password.",
+          "auth/invalid-credential": "Email or password is incorrect.",
+          "auth/network-request-failed":
+            "Network error. Check your internet connection and try again.",
+          "permission-denied":
+            "Firebase denied access. Check your Firestore security rules."
+        };
 
-$("reportForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if (!currentUser) return;
-
-  const link = $("reportLink").value.trim();
-
-  try {
-    const url = new URL(link);
-
-    if (
-      url.protocol !== "https:" ||
-      !["drive.google.com", "docs.google.com"].includes(url.hostname)
-    ) {
-      throw new Error("Use a Google Drive or Google Docs HTTPS link.");
-    }
-
-    await addDoc(collection(db, "reports"), {
-      title: $("reportTitle").value.trim(),
-      course: $("reportCourse").value.trim(),
-      description: $("reportDescription").value.trim(),
-      link: url.href,
-      authorName: currentUser.displayName || currentUser.email,
-      authorUid: currentUser.uid,
-      createdAt: serverTimestamp()
-    });
-
-    $("reportForm").reset();
-    showMessage("reportMessage", "Report link shared successfully.", true);
-  } catch (error) {
-    showMessage("reportMessage", error.message || "Could not share report.");
-  }
-});
-
-/* LOCAL CHAT — NOT SHARED BETWEEN MEMBERS */
-function chatKey() {
-  return "biogrouphub_chat_" + (currentUser?.uid || "guest");
-}
-
-function getMessages() {
-  try {
-    return JSON.parse(localStorage.getItem(chatKey()) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function renderChat() {
-  const messages = getMessages();
-  const container = $("chatMessages");
-
-  $("chatCount").textContent = messages.length;
-  container.replaceChildren();
-
-  if (!messages.length) {
-    container.textContent = "No messages yet. Start the discussion.";
-    return;
-  }
-
-  messages.forEach(message => {
-    const article = document.createElement("article");
-    article.className = "chat-message";
-
-    const name = document.createElement("strong");
-    name.textContent = message.name || "Member";
-
-    const text = document.createElement("p");
-    text.textContent = message.text || "";
-    text.style.whiteSpace = "pre-wrap";
-
-    const time = document.createElement("small");
-    time.className = "muted";
-    time.textContent = message.time || "";
-
-    article.append(name, text, time);
-    container.appendChild(article);
-  });
-}
-
-$("chatForm").addEventListener("submit", event => {
-  event.preventDefault();
-  if (!currentUser) return;
-
-  const text = $("chatInput").value.trim();
-  if (!text) return;
-
-  try {
-    const messages = getMessages();
-
-    messages.push({
-      name: currentUser.displayName || currentUser.email || "Member",
-      text,
-      time: new Date().toLocaleString()
-    });
-
-    localStorage.setItem(chatKey(), JSON.stringify(messages.slice(-100)));
-    $("chatInput").value = "";
-    renderChat();
-  } catch {
-    alert("Could not save this message on your device.");
-  }
-});
-
-$("clearChat").addEventListener("click", () => {
-  if (confirm("Clear the messages saved on this device?")) {
-    localStorage.removeItem(chatKey());
-    renderChat();
-  }
-});
-
-/* DAILY FULL-SCREEN VIDEO CALL */
-function getDailyRoom() {
-  if (DAILY_ROOM_URL.includes("YOUR-DAILY-DOMAIN")) {
-    alert("Add your actual Daily room URL in the JavaScript first.");
-    return "";
-  }
-
-  try {
-    const url = new URL(DAILY_ROOM_URL);
-
-    if (url.protocol !== "https:" || !url.hostname.endsWith(".daily.co")) {
-      alert("Check your Daily room URL.");
-      return "";
-    }
-
-    return url.href;
-  } catch {
-    alert("The Daily room URL is invalid.");
-    return "";
-  }
-}
-
-function closeDailyCall() {
-  const call = dailyCall;
-  dailyCall = null;
-  dailyStarting = false;
-
-  if (call) {
-    try {
-      call.destroy();
-    } catch (error) {
-      console.error("Daily cleanup error:", error);
-    }
-  }
-
-  $("dailyContainer").classList.remove("daily-fullscreen");
-  $("dailyContainer").classList.add("hidden");
-  $("dailyContainer").replaceChildren();
-
-  document.body.classList.remove("call-open");
-  $("meetingPlaceholder").classList.remove("hidden");
-  $("leaveMeeting").classList.add("hidden");
-  $("meetingStatus").textContent = "Ready to connect";
-}
-
-async function startDailyCall() {
-  if (!currentUser) {
-    alert("Please sign in first.");
-    return;
-  }
-
-  if (dailyStarting || dailyCall) return;
-
-  const roomUrl = getDailyRoom();
-  if (!roomUrl) return;
-
-  if (!window.DailyIframe) {
-    alert("Daily did not load. Check your internet and refresh.");
-    return;
-  }
-
-  dailyStarting = true;
-
-  const container = $("dailyContainer");
-  container.replaceChildren();
-
-  const topbar = document.createElement("div");
-  topbar.className = "daily-call-topbar";
-
-  const heading = document.createElement("div");
-  heading.innerHTML =
-    '<div class="daily-call-title">🧬 BioGroup Hub</div>' +
-    '<div class="daily-call-subtitle">Biology group video meeting</div>';
-
-  const closeButton = document.createElement("button");
-  closeButton.className = "daily-call-close";
-  closeButton.type = "button";
-  closeButton.textContent = "×";
-  closeButton.setAttribute("aria-label", "Leave meeting");
-  closeButton.addEventListener("click", closeDailyCall);
-
-  topbar.append(heading, closeButton);
-
-  const mount = document.createElement("div");
-  mount.id = "dailyFrameMount";
-
-  container.append(topbar, mount);
-  container.classList.remove("hidden");
-  container.classList.add("daily-fullscreen");
-
-  $("meetingPlaceholder").classList.add("hidden");
-  $("leaveMeeting").classList.remove("hidden");
-  document.body.classList.add("call-open");
-  $("meetingStatus").textContent = "Connecting...";
-
-  try {
-    const call = window.DailyIframe.createFrame(mount, {
-      showLeaveButton: true,
-      showFullscreenButton: true,
-      iframeStyle: {
-        position: "absolute",
-        inset: "0",
-        width: "100%",
-        height: "100%",
-        border: "0",
-        background: "#101b17"
+        status(
+          "authStatus",
+          messages[error.code] || error.message || "Something went wrong.",
+          true
+        );
+      } finally {
+        $("authSubmit").disabled = false;
       }
     });
 
-    dailyCall = call;
-
-    call.on("joined-meeting", () => {
-      $("meetingStatus").textContent = "Connected";
-      dailyStarting = false;
+    $("signOutBtn").addEventListener("click", async () => {
+      try {
+        leaveMeeting();
+        stopListeners();
+        await signOut(auth);
+      } catch (error) {
+        console.error(error);
+        alert("Could not sign out. Please try again.");
+      }
     });
 
-    call.on("left-meeting", () => {
-      closeDailyCall();
+    // Real-time chat
+    function startChatListener() {
+      if (unsubscribeChat) unsubscribeChat();
+
+      const messagesBox = $("chatMessages");
+      messagesBox.replaceChildren(
+        makeElement("p", "muted", "Loading messages...")
+      );
+
+      const messagesQuery = query(
+        collection(db, "messages"),
+        orderBy("createdAt", "desc"),
+        limit(100)
+      );
+
+      unsubscribeChat = onSnapshot(
+        messagesQuery,
+        (snapshot) => {
+          messagesBox.replaceChildren();
+
+          if (snapshot.empty) {
+            messagesBox.append(
+              makeElement("p", "muted", "No messages yet. Start the conversation!")
+            );
+            return;
+          }
+
+          snapshot.docs.reverse().forEach((messageDoc) => {
+            const message = messageDoc.data();
+            const card = makeElement("article", "message");
+            const author = makeElement(
+              "strong",
+              "",
+              safeText(message.displayName || message.email || "Member")
+            );
+            const content = makeElement("p", "", safeText(message.text));
+            const time = makeElement(
+              "small",
+              "",
+              message.createdAt?.toDate
+                ? message.createdAt.toDate().toLocaleString()
+                : "Just now"
+            );
+
+            card.append(author, content, time);
+            messagesBox.append(card);
+          });
+
+          messagesBox.scrollTop = messagesBox.scrollHeight;
+        },
+        (error) => {
+          console.error(error);
+          status("chatStatus", "Could not load chat. Check Firestore rules.", true);
+        }
+      );
+    }
+
+    $("chatForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!currentUser) return;
+
+      const input = $("chatInput");
+      const text = input.value.trim();
+
+      if (!text) return;
+
+      const sendButton = $("chatForm").querySelector("button");
+      sendButton.disabled = true;
+
+      try {
+        await addDoc(collection(db, "messages"), {
+          uid: currentUser.uid,
+          displayName:
+            currentUser.displayName || currentUser.email || "Member",
+          email: currentUser.email || "",
+          text,
+          createdAt: serverTimestamp()
+        });
+
+        input.value = "";
+        status("chatStatus", "");
+      } catch (error) {
+        console.error(error);
+        status(
+          "chatStatus",
+          "Message failed to send. Check your connection and Firestore rules.",
+          true
+        );
+      } finally {
+        sendButton.disabled = false;
+      }
     });
 
-    call.on("error", error => {
-      console.error("Daily meeting error:", error);
-      $("meetingStatus").textContent = "Connection problem";
+    // Shared report links: files remain on Google Drive
+    function startReportsListener() {
+      if (unsubscribeReports) unsubscribeReports();
+
+      const list = $("reportsList");
+      list.replaceChildren(makeElement("p", "muted", "Loading reports..."));
+
+      const reportsQuery = query(
+        collection(db, "reports"),
+        orderBy("createdAt", "desc"),
+        limit(100)
+      );
+
+      unsubscribeReports = onSnapshot(
+        reportsQuery,
+        (snapshot) => {
+          list.replaceChildren();
+
+          if (snapshot.empty) {
+            list.append(
+              makeElement("p", "muted", "No reports have been shared yet.")
+            );
+            return;
+          }
+
+          snapshot.forEach((reportDoc) => {
+            const report = reportDoc.data();
+            const item = makeElement("article", "list-item");
+            const title = makeElement(
+              "h3",
+              "",
+              safeText(report.title || "Untitled report")
+            );
+            const description = makeElement(
+              "p",
+              "muted",
+              safeText(report.description || "No description provided.")
+            );
+            const author = makeElement(
+              "p",
+              "muted",
+              "Shared by " + safeText(report.displayName || "Member")
+            );
+
+            item.append(title, description, author);
+
+            try {
+              const url = new URL(report.url);
+
+              if (url.protocol === "https:") {
+                const link = makeElement("a", "link-btn", "Open report ↗");
+                link.href = url.href;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                item.append(link);
+              }
+            } catch {
+              item.append(
+                makeElement("p", "muted", "This report has an invalid link.")
+              );
+            }
+
+            list.append(item);
+          });
+        },
+        (error) => {
+          console.error(error);
+          list.replaceChildren(
+            makeElement("p", "muted", "Could not load reports. Check Firestore rules.")
+          );
+        }
+      );
+    }
+
+    $("reportForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!currentUser) return;
+
+      const title = $("reportTitle").value.trim();
+      const rawUrl = $("reportUrl").value.trim();
+      const description = $("reportDescription").value.trim();
+
+      let parsedUrl;
+
+      try {
+        parsedUrl = new URL(rawUrl);
+      } catch {
+        status("reportStatus", "Enter a valid document URL.", true);
+        return;
+      }
+
+      if (parsedUrl.protocol !== "https:") {
+        status("reportStatus", "Only secure HTTPS links are accepted.", true);
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "reports"), {
+          title,
+          url: parsedUrl.href,
+          description,
+          uid: currentUser.uid,
+          displayName: currentUser.displayName || currentUser.email || "Member",
+          createdAt: serverTimestamp()
+        });
+
+        $("reportForm").reset();
+        status("reportStatus", "Report link shared successfully.");
+      } catch (error) {
+        console.error(error);
+        status(
+          "reportStatus",
+          "Could not share the report. Check Firestore rules and connection.",
+          true
+        );
+      }
     });
 
-    await call.join({
-      url: roomUrl,
-      userName:
-        currentUser.displayName || currentUser.email || "BioGroup Member"
+    // Registered members
+    function startMembersListener() {
+      if (unsubscribeMembers) unsubscribeMembers();
+
+      const list = $("membersList");
+      list.replaceChildren(makeElement("p", "muted", "Loading members..."));
+
+      const membersQuery = query(
+        collection(db, "users"),
+        limit(200)
+      );
+
+      unsubscribeMembers = onSnapshot(
+        membersQuery,
+        (snapshot) => {
+          list.replaceChildren();
+
+          if (snapshot.empty) {
+            list.append(
+              makeElement("p", "muted", "No member profiles found yet.")
+            );
+            return;
+          }
+
+          snapshot.forEach((memberDoc) => {
+            const member = memberDoc.data();
+            const item = makeElement("article", "list-item");
+            const name = makeElement(
+              "strong",
+              "",
+              safeText(member.displayName || "BioGroup member")
+            );
+            const email = makeElement(
+              "p",
+              "muted",
+              safeText(member.email || "")
+            );
+
+            item.append(name, email);
+            list.append(item);
+          });
+        },
+        (error) => {
+          console.error(error);
+          status(
+            "membersStatus",
+            "Could not load members. Check Firestore rules.",
+            true
+          );
+        }
+      );
+    }
+
+    // Load Jitsi only when a user joins a meeting
+    function loadJitsi() {
+      if (window.JitsiMeetExternalAPI) return Promise.resolve();
+
+      if (jitsiLoading) return jitsiLoading;
+
+      jitsiLoading = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://meet.jit.si/external_api.js";
+        script.async = true;
+
+        script.onload = () => {
+          if (window.JitsiMeetExternalAPI) {
+            resolve();
+          } else {
+            reject(new Error("Jitsi API was not available."));
+          }
+        };
+
+        script.onerror = () => {
+          jitsiLoading = null;
+          reject(new Error("Could not load the meeting service."));
+        };
+
+        document.head.append(script);
+      });
+
+      return jitsiLoading;
+    }
+
+    $("joinMeetingBtn").addEventListener("click", async () => {
+      if (!currentUser) return;
+
+      const room = $("roomName").value.trim();
+
+      if (!/^[a-zA-Z0-9_-]{3,80}$/.test(room)) {
+        status(
+          "meetingStatus",
+          "Use 3–80 letters, numbers, underscores or hyphens for the room name.",
+          true
+        );
+        return;
+      }
+
+      if (jitsiApi) leaveMeeting();
+
+      const container = $("jitsiContainer");
+      container.replaceChildren();
+      status("meetingStatus", "Connecting to the meeting...");
+
+      try {
+        await loadJitsi();
+
+        jitsiApi = new window.JitsiMeetExternalAPI("meet.jit.si", {
+          roomName: room,
+          parentNode: container,
+          width: "100%",
+          height: 420,
+          userInfo: {
+            displayName:
+              currentUser.displayName || currentUser.email || "BioGroup member"
+          },
+          configOverwrite: {
+            prejoinPageEnabled: true
+          },
+          interfaceConfigOverwrite: {
+            SHOW_JITSI_WATERMARK: false
+          }
+        });
+
+        jitsiApi.addEventListener("videoConferenceJoined", () => {
+          status("meetingStatus", "You joined the meeting.");
+          $("joinMeetingBtn").classList.add("hidden");
+          $("leaveMeetingBtn").classList.remove("hidden");
+        });
+
+        jitsiApi.addEventListener("videoConferenceLeft", () => {
+          leaveMeeting();
+        });
+
+        status(
+          "meetingStatus",
+          "Meeting is loading. Allow microphone or camera permissions if prompted."
+        );
+      } catch (error) {
+        console.error(error);
+        status(
+          "meetingStatus",
+          error.message || "Could not start the meeting.",
+          true
+        );
+        leaveMeeting();
+      }
     });
 
-    dailyStarting = false;
-  } catch (error) {
-    console.error("Daily join error:", error);
-    closeDailyCall();
-    $("meetingStatus").textContent = "Could not connect";
-    alert("Could not join the room. Check the URL and your connection.");
-  } finally {
-    dailyStarting = false;
-  }
-}
+    function leaveMeeting() {
+      if (jitsiApi) {
+        const api = jitsiApi;
+        jitsiApi = null;
 
-$("startMeeting").addEventListener("click", startDailyCall);
-$("joinMeeting").addEventListener("click", startDailyCall);
+        try {
+          api.dispose();
+        } catch (error) {
+          console.warn("Meeting cleanup:", error);
+        }
+      }
 
-$("openMeeting").addEventListener("click", () => {
-  const url = getDailyRoom();
-  if (url) window.open(url, "_blank", "noopener,noreferrer");
-});
+      $("jitsiContainer").replaceChildren();
+      $("joinMeetingBtn").classList.remove("hidden");
+      $("leaveMeetingBtn").classList.add("hidden");
+    }
 
-$("leaveMeeting").addEventListener("click", closeDailyCall);
+    $("leaveMeetingBtn").addEventListener("click", leaveMeeting);
 
-/* INITIAL PAGE */
-$("roomInput").value = "biogroup-study";
-openPage("home");
-</script>
+    // Keep the interface in sync with Firebase sign-in status
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+
+      if (!user) {
+        stopListeners();
+        leaveMeeting();
+        showAuth();
+        return;
+      }
+
+      showApp();
+      showSection("home");
+
+      startChatListener();
+      startReportsListener();
+      startMembersListener();
+    });
+  </script>
+
+
 </body>
 </html>
